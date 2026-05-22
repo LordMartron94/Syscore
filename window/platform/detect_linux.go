@@ -7,6 +7,11 @@ import (
 	"os"
 )
 
+/*
+DisplayAPIDetect selects Wayland when WAYLAND_DISPLAY is set, otherwise X11 when DISPLAY is set.
+
+See package syscore SYSCORE_Window_DisplayAPIDetect for the public facade contract.
+*/
 func DisplayAPIDetect() (DisplayAPI, error) {
 	if DisplayAPIIsAvailable(DisplayAPIWayland) {
 		return DisplayAPIWayland, nil
@@ -17,6 +22,9 @@ func DisplayAPIDetect() (DisplayAPI, error) {
 	return DisplayAPIInvalid, fmt.Errorf("window platform: no %s or %s environment found", EnvWaylandDisplay, EnvX11Display)
 }
 
+/*
+DisplayAPIIsAvailable reports whether api is usable on Linux (environment variables present).
+*/
 func DisplayAPIIsAvailable(api DisplayAPI) bool {
 	switch api {
 	case DisplayAPIWayland:
@@ -30,6 +38,9 @@ func DisplayAPIIsAvailable(api DisplayAPI) bool {
 	}
 }
 
+/*
+DisplayAPIListAvailable returns Wayland and/or X11 when their environment variables are set (Wayland first).
+*/
 func DisplayAPIListAvailable() []DisplayAPI {
 	available := make([]DisplayAPI, 0, 2)
 	if DisplayAPIIsAvailable(DisplayAPIWayland) {

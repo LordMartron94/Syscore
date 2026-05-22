@@ -3,16 +3,53 @@ package syscore
 import "syscore/internal"
 
 /*
-SYSCORE_C_StringToCString converts a standard Go string to a null-terminated C string.
+SYSCORE_C_StringToCString converts a Go string to a NUL-terminated UTF-8 C string.
 
-It returns both the actual array and the pointer to the first byte.
+[Context]
+Many FFI calls expect char* pointing at bytes that remain valid for the duration of the
+call. The returned slice owns the storage; keep it alive while the C API uses the pointer.
+
+[Parameters]
+str - Source string; an extra NUL byte is appended.
+
+[Returns]
+A byte slice including the terminator and a pointer to its first element (suitable for
+*byte parameters in purego bindings).
+
+[Side Effects]
+Allocates a new slice. Pure aside from allocation.
+
+[Example]
+
+	name, namePtr := syscore.SYSCORE_C_StringToCString("vkCreateInstance")
+	_ = name
+	commands.CreateInstance(namePtr, ...)
 */
 func SYSCORE_C_StringToCString(str string) ([]byte, *byte) {
 	return internal.StringToCString(str)
 }
 
 /*
-SYSCORE_C_StringToCStringFirstByte is the same as SYSCORE_C_StringToCString but returns only the pointer to the first byte.
+SYSCORE_C_StringToCStringFirstByte is the same as SYSCORE_C_StringToCString but returns only the pointer.
+
+[Context]
+Use when the backing slice is kept alive elsewhere or only the pointer is passed into C.
+
+[Parameters]
+str - Source string; an extra NUL byte is appended in a temporary slice that remains
+reachable only if you also retain the slice from SYSCORE_C_StringToCString.
+
+[Returns]
+Pointer to the first byte of the NUL-terminated encoding.
+
+[Side Effects]
+Allocates a slice internally; the pointer is invalid after that slice is garbage-collected
+unless you retain the full slice from SYSCORE_C_StringToCString.
+
+[Example]
+
+	ptr := syscore.SYSCORE_C_StringToCStringFirstByte("xcb_connect")
+	// Prefer SYSCORE_C_StringToCString when the slice must outlive the call.
 */
 func SYSCORE_C_StringToCStringFirstByte(str string) *byte {
 	_, firstByte := internal.StringToCString(str)
@@ -21,6 +58,18 @@ func SYSCORE_C_StringToCStringFirstByte(str string) *byte {
 
 /*
 SYSCORE_C_StringToCStringSlice is the same as SYSCORE_C_StringToCString but returns only the slice.
+
+[Context]
+Use when you need to retain the backing storage in a []byte without using the pointer form.
+
+[Parameters]
+str - Source string; an extra NUL byte is appended.
+
+[Returns]
+NUL-terminated UTF-8 bytes.
+
+[Side Effects]
+Allocates a new slice.
 */
 func SYSCORE_C_StringToCStringSlice(str string) []byte {
 	array, _ := internal.StringToCString(str)
@@ -28,23 +77,66 @@ func SYSCORE_C_StringToCStringSlice(str string) []byte {
 }
 
 /*
-SYSCORE_C_CStringToString converts a null-terminated C string into a standard Go string.
+SYSCORE_C_CStringToString converts a NUL-terminated C string stored in a Go byte slice to a Go string.
+
+[Context]
+Decodes FFI output or inbound char* data that has already been copied into Go memory.
+
+[Parameters]
+str - Bytes up to and including the first 0 byte; content after the first NUL is ignored.
+
+[Returns]
+A Go string without the terminator.
+
+[Side Effects]
+None. Does not mutate str.
 */
 func SYSCORE_C_CStringToString(str []byte) string {
 	return internal.CStringToString(str)
 }
 
 /*
-SYSCORE_C_CStringPointerToString converts a NUL-terminated C string pointer into a Go string.
+SYSCORE_C_CStringPointerToString reads a NUL-terminated C string from a raw address.
+
+[Context]
+Used for Wayland registry global callbacks and similar FFI surfaces that pass const char*
+as uintptr. The memory must be readable in the current process.
+
+[Parameters]
+ptr - Address of the first byte; 0 returns "".
+
+[Returns]
+Decoded string up to the first NUL.
+
+[Side Effects]
+Reads foreign memory at ptr until NUL. No writes.
+
+[Edge Cases]
+Invalid or unmapped ptr can panic; callers must ensure the pointer came from a live C callback.
 */
 func SYSCORE_C_CStringPointerToString(ptr uintptr) string {
 	return internal.CStringPointerToString(ptr)
 }
 
 /*
-SYSCORE_C_StringToUTF16 converts a Go string to a NUL-terminated UTF-16 string for Win32 APIs.
+SYSCORE_C_StringToUTF16 converts a Go string to a NUL-terminated UTF-16 string for Win32 LPCWSTR.
 
-It returns both the code unit slice and a pointer to the first element.
+[Context]
+Win32 window APIs require wide-character strings. The returned slice owns the storage.
+
+[Parameters]
+str - Source Unicode string; a UTF-16 NUL code unit is appended.
+
+[Returns]
+UTF-16 code units including the terminator and a pointer to the first element.
+
+[Side Effects]
+Allocates a new slice.
+
+[Example]
+
+	class, classPtr := syscore.SYSCORE_C_StringToUTF16("MyWindowClass")
+	commands.RegisterClassExW(&wndClass) // wndClass.LpszClassName = classPtr
 */
 func SYSCORE_C_StringToUTF16(str string) ([]uint16, *uint16) {
 	return internal.StringToUTF16(str)
