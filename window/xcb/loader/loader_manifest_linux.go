@@ -33,6 +33,14 @@ func XcbCommandsLoadManifest(module XcbModule, manifest *XcbCommandManifest, com
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.MapWindow, Name: "xcb_map_window"})
 		case XcbCommandManifestFieldFlush:
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.Flush, Name: "xcb_flush"})
+		case XcbCommandManifestFieldInternAtom:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.InternAtom, Name: "xcb_intern_atom"})
+		case XcbCommandManifestFieldInternAtomReply:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.InternAtomReply, Name: "xcb_intern_atom_reply"})
+		case XcbCommandManifestFieldChangeProperty:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.ChangeProperty, Name: "xcb_change_property"})
+		case XcbCommandManifestFieldFree:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.Free, Name: "xcb_free"})
 		default:
 			return fmt.Errorf("xcb loader: unknown manifest field %d", field)
 		}

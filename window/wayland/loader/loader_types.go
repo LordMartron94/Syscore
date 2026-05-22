@@ -30,4 +30,8 @@ type WaylandCommands struct {
 		DisplayRoundtrip is wl_display_roundtrip. Dispatches events after requests.
 	*/
 	DisplayRoundtrip bindings.PFN_wl_display_roundtrip
+	/*
+		ProxyMarshal is wl_proxy_marshal. Sends requests on existing proxies (xdg title, ack_configure, etc.).
+	*/
+	ProxyMarshal bindings.PFN_wl_proxy_marshal
 }

@@ -103,6 +103,23 @@ data - User data pointer passed to callbacks.
 type PFN_wl_proxy_add_listener func(proxy WlProxy, implementation uintptr, data uintptr) int32
 
 /*
+PFN_wl_proxy_marshal marshals a request on an existing Wayland proxy.
+
+[Context]
+Maps to wl_proxy_marshal. Used for xdg_toplevel.set_title, xdg_surface.get_toplevel,
+xdg_surface.ack_configure, and other non-constructor requests.
+
+[Parameters]
+proxy - Target proxy.
+opcode - Interface-specific request opcode.
+args - Trailing request arguments expanded by purego.
+
+[Returns]
+Return value depends on the request (often unused).
+*/
+type PFN_wl_proxy_marshal func(proxy WlProxy, opcode uint32, args ...any) WlProxy
+
+/*
 PFN_wl_display_roundtrip blocks until pending requests are processed and events dispatched.
 
 [Context]

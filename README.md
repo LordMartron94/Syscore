@@ -67,7 +67,7 @@ Platform window APIs mirror **gpuarch** Vulkan: **bindings** (registry-faithful 
 | Backend | GOOS | Typical library |
 |---------|------|-----------------|
 | X11/XCB | `linux` | `libxcb.so.1` |
-| Wayland | `linux` | `libwayland-client.so.0` |
+| Wayland | `linux` | `libwayland-client.so.0`, embedded `libsyscore_wayland_xdg.so` (xdg-shell) |
 | Win32 | `windows` | `user32.dll`, `kernel32.dll` |
 | AppKit | `darwin` | `libobjc.A.dylib`, `AppKit.framework` |
 
@@ -116,7 +116,7 @@ setup := commands.GetSetup(conn)
 // commands.CreateWindow, MapWindow, Flush, ...
 ```
 
-Wayland globals (`wl_registry_interface`, etc.) are resolved with `SYSCORE_Window_Wayland_ModuleSymbolResolve`. Win32 uses separate user32/kernel32 module handles and symbol resolve helpers.
+Wayland globals (`wl_registry_interface`, etc.) are resolved with `SYSCORE_Window_Wayland_ModuleSymbolResolve`. xdg-shell `wl_interface` pointers (`xdg_wm_base_interface`, etc.) come from `SYSCORE_Window_Wayland_Xdg_ModuleLoad` / `SYSCORE_Window_Wayland_Xdg_ModuleSymbolResolve`; use `ProxyMarshal` for `xdg_toplevel.set_title`, `xdg_surface.ack_configure`, and related requests. XCB adds `InternAtom`, `InternAtomReply`, `ChangeProperty`, and `Free` for window titles (`WM_NAME`, `_NET_WM_NAME`). AppKit exposes `NSString` / `setTitle:` selector constants. Win32 uses separate user32/kernel32 module handles and symbol resolve helpers.
 
 ### Selective command loading (manifest)
 

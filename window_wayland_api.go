@@ -1,3 +1,5 @@
+//go:build linux
+
 package syscore
 
 import (
@@ -59,6 +61,8 @@ type (
 	SYSCORE_Window_Wayland_PFN_proxy_add_listener = bindings.PFN_wl_proxy_add_listener
 	// SYSCORE_Window_Wayland_PFN_display_roundtrip is the C type for wl_display_roundtrip.
 	SYSCORE_Window_Wayland_PFN_display_roundtrip = bindings.PFN_wl_display_roundtrip
+	// SYSCORE_Window_Wayland_PFN_proxy_marshal is the C type for wl_proxy_marshal.
+	SYSCORE_Window_Wayland_PFN_proxy_marshal = bindings.PFN_wl_proxy_marshal
 )
 
 /*
@@ -169,4 +173,11 @@ Returns an error if manifest or commands is nil or any bind fails.
 */
 func SYSCORE_Window_Wayland_CommandsLoadManifest(module SYSCORE_Window_Wayland_Module, manifest *SYSCORE_Window_Wayland_CommandManifest, commands *SYSCORE_Window_Wayland_Commands) error {
 	return loader.WaylandCommandsLoadManifest(module, manifest, commands)
+}
+
+/*
+SYSCORE_Window_Wayland_CommandManifestAddProxyMarshal registers wl_proxy_marshal for selective loading.
+*/
+func SYSCORE_Window_Wayland_CommandManifestAddProxyMarshal(manifest *SYSCORE_Window_Wayland_CommandManifest, target *SYSCORE_Window_Wayland_PFN_proxy_marshal) error {
+	return loader.WaylandCommandManifestAddProxyMarshal(manifest, target)
 }

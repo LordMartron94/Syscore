@@ -18,6 +18,8 @@ const (
 	ObjCClassNSApplication = "NSApplication"
 	// ObjCClassNSWindow is the UTF-8 class name for NSWindow.
 	ObjCClassNSWindow = "NSWindow"
+	// ObjCClassNSString is the UTF-8 class name for NSString (Foundation).
+	ObjCClassNSString = "NSString"
 )
 
 const (
@@ -29,4 +31,8 @@ const (
 	ObjCSelInitWithContentRectStyleMaskBackingDefer = "initWithContentRect:styleMask:backing:defer:"
 	// ObjCSelMakeKeyAndOrderFront is the selector to show and key a window.
 	ObjCSelMakeKeyAndOrderFront = "makeKeyAndOrderFront:"
+	// ObjCSelStringWithUTF8String is the NSString class method +stringWithUTF8String:.
+	ObjCSelStringWithUTF8String = "stringWithUTF8String:"
+	// ObjCSelSetTitle is the NSWindow instance method -setTitle:.
+	ObjCSelSetTitle = "setTitle:"
 )

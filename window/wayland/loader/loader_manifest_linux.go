@@ -29,6 +29,8 @@ func WaylandCommandsLoadManifest(module WaylandModule, manifest *WaylandCommandM
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.ProxyAddListener, Name: "wl_proxy_add_listener"})
 		case WaylandCommandManifestFieldDisplayRoundtrip:
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.DisplayRoundtrip, Name: "wl_display_roundtrip"})
+		case WaylandCommandManifestFieldProxyMarshal:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.ProxyMarshal, Name: "wl_proxy_marshal"})
 		default:
 			return fmt.Errorf("wayland loader: unknown manifest field %d", field)
 		}

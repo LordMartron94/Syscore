@@ -21,6 +21,10 @@ func xcbCommandMappingsAll(commands *XcbCommands) []loadutil.CommandMapping {
 		{Target: &commands.CreateWindow, Name: "xcb_create_window"},
 		{Target: &commands.MapWindow, Name: "xcb_map_window"},
 		{Target: &commands.Flush, Name: "xcb_flush"},
+		{Target: &commands.InternAtom, Name: "xcb_intern_atom"},
+		{Target: &commands.InternAtomReply, Name: "xcb_intern_atom_reply"},
+		{Target: &commands.ChangeProperty, Name: "xcb_change_property"},
+		{Target: &commands.Free, Name: "xcb_free"},
 	}
 }
 

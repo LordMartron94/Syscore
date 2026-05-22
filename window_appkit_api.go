@@ -1,3 +1,5 @@
+//go:build darwin
+
 package syscore
 
 import (
@@ -36,10 +38,13 @@ const (
 	SYSCORE_Window_Appkit_BackingStoreBuffered      = bindings.NSBackingStoreBuffered
 	SYSCORE_Window_Appkit_ClassNSApplication        = bindings.ObjCClassNSApplication
 	SYSCORE_Window_Appkit_ClassNSWindow             = bindings.ObjCClassNSWindow
+	SYSCORE_Window_Appkit_ClassNSString             = bindings.ObjCClassNSString
 	SYSCORE_Window_Appkit_SelSharedApplication      = bindings.ObjCSelSharedApplication
 	SYSCORE_Window_Appkit_SelAlloc                  = bindings.ObjCSelAlloc
 	SYSCORE_Window_Appkit_SelInitWindow             = bindings.ObjCSelInitWithContentRectStyleMaskBackingDefer
 	SYSCORE_Window_Appkit_SelMakeKeyAndOrderFront   = bindings.ObjCSelMakeKeyAndOrderFront
+	SYSCORE_Window_Appkit_SelStringWithUTF8String   = bindings.ObjCSelStringWithUTF8String
+	SYSCORE_Window_Appkit_SelSetTitle               = bindings.ObjCSelSetTitle
 )
 
 type (

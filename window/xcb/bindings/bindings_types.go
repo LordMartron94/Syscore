@@ -142,6 +142,96 @@ Request cookie.
 type PFN_xcb_map_window func(c XcbConnectionT, window XcbWindowT) XcbVoidCookieT
 
 /*
+XcbAtomT is an X atom ID (xcb_atom_t).
+*/
+type XcbAtomT uint32
+
+/*
+XcbInternAtomCookieT is the cookie returned by xcb_intern_atom (xcb_intern_atom_cookie_t).
+*/
+type XcbInternAtomCookieT uint32
+
+/*
+PFN_xcb_intern_atom requests an atom by name from the X server.
+
+[Context]
+Maps to xcb_intern_atom. Pair with InternAtomReply after Flush.
+
+[Parameters]
+c - Connection handle.
+onlyIfExists - 0 to create the atom if missing, non-zero to only return existing atoms.
+nameLen - Length of name in bytes (excluding NUL).
+name - Atom name bytes (not necessarily NUL-terminated when nameLen is set).
+
+[Returns]
+Request cookie for InternAtomReply.
+*/
+type PFN_xcb_intern_atom func(
+	c XcbConnectionT,
+	onlyIfExists uint8,
+	nameLen uint16,
+	name *byte,
+) XcbInternAtomCookieT
+
+/*
+PFN_xcb_intern_atom_reply blocks for the reply to xcb_intern_atom.
+
+[Context]
+Maps to xcb_intern_atom_reply. Free the returned pointer with Free when done.
+
+[Parameters]
+c - Connection handle.
+cookie - Cookie from InternAtom.
+error - Optional *xcb_generic_error_t* output pointer, or nil.
+
+[Returns]
+Pointer to xcb_intern_atom_reply_t, or 0 on error.
+*/
+type PFN_xcb_intern_atom_reply func(
+	c XcbConnectionT,
+	cookie XcbInternAtomCookieT,
+	error *uintptr,
+) uintptr
+
+/*
+PFN_xcb_change_property sets a window property (unchecked).
+
+[Context]
+Maps to xcb_change_property. For UTF-8 titles use format 8 and data_len in bytes.
+
+[Parameters]
+c - Connection handle.
+mode - Property mode (for example XCB_PROP_MODE_REPLACE).
+window - Target window.
+property - Property atom.
+type - Property type atom (for example interned UTF8_STRING).
+format - 8, 16, or 32 (data width in bits).
+dataLen - Length of data: bytes when format is 8, 4-byte units when format is 16 or 32.
+data - Property value bytes.
+
+[Returns]
+Request cookie.
+*/
+type PFN_xcb_change_property func(
+	c XcbConnectionT,
+	mode uint8,
+	window XcbWindowT,
+	property XcbAtomT,
+	typeAtom XcbAtomT,
+	format uint8,
+	dataLen uint32,
+	data *byte,
+) XcbVoidCookieT
+
+/*
+PFN_xcb_free releases memory returned by XCB reply functions.
+
+[Context]
+Maps to xcb_free. Call on pointers from InternAtomReply after reading fields.
+*/
+type PFN_xcb_free func(ptr uintptr)
+
+/*
 PFN_xcb_flush flushes the output buffer to the X server.
 
 [Context]

@@ -17,6 +17,10 @@ const (
 	XcbCommandManifestFieldCreateWindow
 	XcbCommandManifestFieldMapWindow
 	XcbCommandManifestFieldFlush
+	XcbCommandManifestFieldInternAtom
+	XcbCommandManifestFieldInternAtomReply
+	XcbCommandManifestFieldChangeProperty
+	XcbCommandManifestFieldFree
 )
 
 type XcbCommandManifest struct {
@@ -56,6 +60,22 @@ func XcbCommandManifestAddMapWindow(manifest *XcbCommandManifest, target *bindin
 
 func XcbCommandManifestAddFlush(manifest *XcbCommandManifest, target *bindings.PFN_xcb_flush) error {
 	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldFlush, target)
+}
+
+func XcbCommandManifestAddInternAtom(manifest *XcbCommandManifest, target *bindings.PFN_xcb_intern_atom) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldInternAtom, target)
+}
+
+func XcbCommandManifestAddInternAtomReply(manifest *XcbCommandManifest, target *bindings.PFN_xcb_intern_atom_reply) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldInternAtomReply, target)
+}
+
+func XcbCommandManifestAddChangeProperty(manifest *XcbCommandManifest, target *bindings.PFN_xcb_change_property) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldChangeProperty, target)
+}
+
+func XcbCommandManifestAddFree(manifest *XcbCommandManifest, target *bindings.PFN_xcb_free) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldFree, target)
 }
 
 func xcbCommandManifestAdd(manifest *XcbCommandManifest, field XcbCommandManifestField, target any) error {

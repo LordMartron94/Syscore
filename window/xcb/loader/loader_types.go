@@ -38,4 +38,20 @@ type XcbCommands struct {
 		Flush is xcb_flush. Sends buffered requests to the X server.
 	*/
 	Flush bindings.PFN_xcb_flush
+	/*
+		InternAtom is xcb_intern_atom. Resolves property and type atom names.
+	*/
+	InternAtom bindings.PFN_xcb_intern_atom
+	/*
+		InternAtomReply is xcb_intern_atom_reply. Blocks for an intern_atom reply.
+	*/
+	InternAtomReply bindings.PFN_xcb_intern_atom_reply
+	/*
+		ChangeProperty is xcb_change_property. Sets window properties such as WM_NAME.
+	*/
+	ChangeProperty bindings.PFN_xcb_change_property
+	/*
+		Free is xcb_free. Releases reply buffers from InternAtomReply.
+	*/
+	Free bindings.PFN_xcb_free
 }

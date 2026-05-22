@@ -15,6 +15,7 @@ const (
 	WaylandCommandManifestFieldProxyMarshalConstructorVersioned
 	WaylandCommandManifestFieldProxyAddListener
 	WaylandCommandManifestFieldDisplayRoundtrip
+	WaylandCommandManifestFieldProxyMarshal
 )
 
 type WaylandCommandManifest struct {
@@ -46,6 +47,10 @@ func WaylandCommandManifestAddProxyAddListener(manifest *WaylandCommandManifest,
 
 func WaylandCommandManifestAddDisplayRoundtrip(manifest *WaylandCommandManifest, target *bindings.PFN_wl_display_roundtrip) error {
 	return waylandCommandManifestAdd(manifest, WaylandCommandManifestFieldDisplayRoundtrip, target)
+}
+
+func WaylandCommandManifestAddProxyMarshal(manifest *WaylandCommandManifest, target *bindings.PFN_wl_proxy_marshal) error {
+	return waylandCommandManifestAdd(manifest, WaylandCommandManifestFieldProxyMarshal, target)
 }
 
 func waylandCommandManifestAdd(manifest *WaylandCommandManifest, field WaylandCommandManifestField, target any) error {

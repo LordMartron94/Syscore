@@ -1,3 +1,5 @@
+//go:build linux
+
 package syscore
 
 import (
@@ -32,7 +34,13 @@ Build with CommandManifestAdd* helpers, then pass to SYSCORE_Window_Xcb_Commands
 */
 type SYSCORE_Window_Xcb_CommandManifest = loader.XcbCommandManifest
 
-const SYSCORE_Window_Xcb_WindowClassInputOutput = bindings.XCB_WINDOW_CLASS_INPUT_OUTPUT
+const (
+	SYSCORE_Window_Xcb_WindowClassInputOutput = bindings.XCB_WINDOW_CLASS_INPUT_OUTPUT
+	SYSCORE_Window_Xcb_PropModeReplace        = bindings.XCB_PROP_MODE_REPLACE
+	SYSCORE_Window_Xcb_AtomNameWMName         = bindings.XCB_ATOM_WM_NAME
+	SYSCORE_Window_Xcb_AtomNameNetWMName      = bindings.XCB_ATOM_NET_WM_NAME
+	SYSCORE_Window_Xcb_AtomNameUTF8String     = bindings.XCB_ATOM_UTF8_STRING
+)
 
 type (
 	// SYSCORE_Window_Xcb_ConnectionT is an opaque xcb_connection_t* (uintptr).
@@ -57,6 +65,18 @@ type (
 	SYSCORE_Window_Xcb_PFN_map_window = bindings.PFN_xcb_map_window
 	// SYSCORE_Window_Xcb_PFN_flush is the C type for xcb_flush.
 	SYSCORE_Window_Xcb_PFN_flush = bindings.PFN_xcb_flush
+	// SYSCORE_Window_Xcb_AtomT is an xcb_atom_t property or type atom ID.
+	SYSCORE_Window_Xcb_AtomT = bindings.XcbAtomT
+	// SYSCORE_Window_Xcb_InternAtomCookieT is the cookie from xcb_intern_atom.
+	SYSCORE_Window_Xcb_InternAtomCookieT = bindings.XcbInternAtomCookieT
+	// SYSCORE_Window_Xcb_PFN_intern_atom is the C type for xcb_intern_atom.
+	SYSCORE_Window_Xcb_PFN_intern_atom = bindings.PFN_xcb_intern_atom
+	// SYSCORE_Window_Xcb_PFN_intern_atom_reply is the C type for xcb_intern_atom_reply.
+	SYSCORE_Window_Xcb_PFN_intern_atom_reply = bindings.PFN_xcb_intern_atom_reply
+	// SYSCORE_Window_Xcb_PFN_change_property is the C type for xcb_change_property.
+	SYSCORE_Window_Xcb_PFN_change_property = bindings.PFN_xcb_change_property
+	// SYSCORE_Window_Xcb_PFN_free is the C type for xcb_free.
+	SYSCORE_Window_Xcb_PFN_free = bindings.PFN_xcb_free
 )
 
 /*
@@ -199,4 +219,45 @@ Returns an error if manifest or commands is nil, not on linux, or any listed sym
 */
 func SYSCORE_Window_Xcb_CommandsLoadManifest(module SYSCORE_Window_Xcb_Module, manifest *SYSCORE_Window_Xcb_CommandManifest, commands *SYSCORE_Window_Xcb_Commands) error {
 	return loader.XcbCommandsLoadManifest(module, manifest, commands)
+}
+
+/*
+SYSCORE_Window_Xcb_InternAtomReplyAtom reads the atom field from an xcb_intern_atom_reply_t pointer.
+
+[Parameters]
+reply - Pointer returned by commands.InternAtomReply.
+
+[Returns]
+Atom ID, or 0 when reply is nil.
+*/
+func SYSCORE_Window_Xcb_InternAtomReplyAtom(reply uintptr) SYSCORE_Window_Xcb_AtomT {
+	return bindings.XcbInternAtomReplyAtom(reply)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddInternAtom registers xcb_intern_atom for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddInternAtom(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_intern_atom) error {
+	return loader.XcbCommandManifestAddInternAtom(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddInternAtomReply registers xcb_intern_atom_reply for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddInternAtomReply(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_intern_atom_reply) error {
+	return loader.XcbCommandManifestAddInternAtomReply(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddChangeProperty registers xcb_change_property for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddChangeProperty(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_change_property) error {
+	return loader.XcbCommandManifestAddChangeProperty(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddFree registers xcb_free for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddFree(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_free) error {
+	return loader.XcbCommandManifestAddFree(manifest, target)
 }
