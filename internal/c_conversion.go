@@ -1,5 +1,7 @@
 package internal
 
+import "unsafe"
+
 func StringToCString(str string) ([]byte, *byte) {
 	b := append([]byte(str), 0)
 	return b, &b[0]
@@ -12,4 +14,23 @@ func CStringToString(str []byte) string {
 		}
 	}
 	return string(str[:])
+}
+
+func CStringPointerToString(ptr uintptr) string {
+	if ptr == 0 {
+		return ""
+	}
+	start := unsafe.Pointer(ptr)
+	length := 0
+	for {
+		if *(*byte)(unsafe.Add(start, length)) == 0 {
+			break
+		}
+		length++
+	}
+	if length == 0 {
+		return ""
+	}
+	slice := unsafe.Slice((*byte)(start), length)
+	return string(slice)
 }
