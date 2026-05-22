@@ -17,8 +17,8 @@ type SYSCORE_Window_Win32_Module = loader.Win32Module
 SYSCORE_Window_Win32_Commands holds bound Win32 USER and KERNEL32 function pointers.
 
 [Context]
-After SYSCORE_Window_Win32_CommandsLoad, call CreateWindowExW, RegisterClassExW, and related
-APIs through the holder fields. Use SYSCORE_C_StringToUTF16 for window and class names.
+After SYSCORE_Window_Win32_CommandsLoad, call through documented fields on loader.Win32Commands.
+Use SYSCORE_C_StringToUTF16 for window and class names; see bindings constants for styles.
 */
 type SYSCORE_Window_Win32_Commands = loader.Win32Commands
 

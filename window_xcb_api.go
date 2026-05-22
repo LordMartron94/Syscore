@@ -19,7 +19,8 @@ SYSCORE_Window_Xcb_Commands holds bound XCB function pointers (1:1 with xcb_* ex
 
 [Context]
 After SYSCORE_Window_Xcb_CommandsLoad, call through fields such as Connect, CreateWindow, and
-Flush rather than using a wrapper layer. Field names mirror the xcb_ entry points.
+Flush. Each field has hover documentation describing the corresponding xcb_* API (see
+syscore/window/xcb/loader.XcbCommands and syscore/window/xcb/bindings.PFN_*).
 */
 type SYSCORE_Window_Xcb_Commands = loader.XcbCommands
 

@@ -17,9 +17,8 @@ type SYSCORE_Window_Wayland_Module = loader.WaylandModule
 SYSCORE_Window_Wayland_Commands holds bound Wayland client function pointers.
 
 [Context]
-After SYSCORE_Window_Wayland_CommandsLoad, invoke wl_* behavior through fields such as
-DisplayConnect and ProxyMarshalConstructor. Interface globals (wl_compositor_interface, etc.)
-are resolved with SYSCORE_Window_Wayland_ModuleSymbolResolve.
+After SYSCORE_Window_Wayland_CommandsLoad, invoke wl_* behavior through documented fields on
+loader.WaylandCommands. Interface globals are resolved with SYSCORE_Window_Wayland_ModuleSymbolResolve.
 */
 type SYSCORE_Window_Wayland_Commands = loader.WaylandCommands
 

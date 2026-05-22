@@ -25,7 +25,7 @@ func runDummyScenario(execCtx shield.SHIELD_Testing_ExecutionContext) shield.SHI
 	type scenarioInput struct{}
 	type scenarioOutput struct{}
 
-	scenario := shield.SHIELD_Testing_ScenarioCreate[scenarioInput, scenarioOutput](
+	scenario := shield.SHIELD_Testing_ScenarioCreate(
 		"scenario_dummy",
 		"Placeholder SYSCORE SHIELD scenario",
 		[]shield.SHIELD_Testing_Guard[scenarioInput, scenarioOutput]{

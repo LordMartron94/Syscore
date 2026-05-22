@@ -18,8 +18,8 @@ type SYSCORE_Window_Appkit_Module = loader.AppkitModule
 SYSCORE_Window_Appkit_Commands holds bound Objective-C runtime entry points used for AppKit windows.
 
 [Context]
-Fields map to objc_getClass, sel_registerName, and objc_msgSend. NSWindow behavior is driven by
-message sends, not separate exported AppKit C functions in this subset.
+Call through documented fields on loader.AppkitCommands (ObjcGetClass, SelRegisterName, ObjcMsgSend).
+NSWindow setup uses bindings constants for class/selector names and ObjcMsgSend for dispatch.
 */
 type SYSCORE_Window_Appkit_Commands = loader.AppkitCommands
 
