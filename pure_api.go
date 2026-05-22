@@ -119,3 +119,29 @@ None.
 func SYSCORE_Pure_LibrarySymbolResolve(library SYSCORE_Pure_DynamicLibrary, symbolName string) (uintptr, error) {
 	return internal.DynamicLibrarySymbolResolve(library, symbolName)
 }
+
+/*
+SYSCORE_Pure_NewCallback converts a Go function to a C-callable function pointer for native callbacks.
+
+[Context]
+Wraps purego.NewCallback (or the platform equivalent). Use for Wayland wl_registry_listener and
+other FFI vtables. The function must use uintptr-sized arguments only (no string or slice parameters).
+
+[Parameters]
+fn - Go function matching the C callback ABI.
+
+[Returns]
+Trampoline address to store in listener vtables.
+
+[Side Effects]
+Callback slots are process-lifetime limited; memory is not released.
+
+[Example]
+
+	cb := syscore.SYSCORE_Pure_NewCallback(func(data uintptr, registry uintptr, name uint32, iface uintptr, version uint32) {
+	    _ = syscore.SYSCORE_C_CStringPointerToString(iface)
+	})
+*/
+func SYSCORE_Pure_NewCallback(fn any) uintptr {
+	return internal.PlatformNewCallback(fn)
+}

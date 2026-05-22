@@ -42,3 +42,7 @@ func FunctionBindAddress(targetFn any, address uintptr) (err error) {
 	purego.RegisterFunc(targetFn, address)
 	return nil
 }
+
+func PlatformNewCallback(fn any) uintptr {
+	return platformNewCallback(fn)
+}

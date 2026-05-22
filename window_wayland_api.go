@@ -27,6 +27,15 @@ SYSCORE_Window_Wayland_CommandManifest lists Wayland entry points for selective 
 */
 type SYSCORE_Window_Wayland_CommandManifest = loader.WaylandCommandManifest
 
+const (
+	SYSCORE_Window_Wayland_OpcodeDisplayGetRegistry      = bindings.WL_DISPLAY_GET_REGISTRY_OPCODE
+	SYSCORE_Window_Wayland_OpcodeRegistryBind            = bindings.WL_REGISTRY_BIND_OPCODE
+	SYSCORE_Window_Wayland_OpcodeCompositorCreateSurface = bindings.WL_COMPOSITOR_CREATE_SURFACE_OPCODE
+	SYSCORE_Window_Wayland_SymbolRegistryInterface       = bindings.WL_REGISTRY_INTERFACE_SYMBOL
+	SYSCORE_Window_Wayland_SymbolCompositorInterface     = bindings.WL_COMPOSITOR_INTERFACE_SYMBOL
+	SYSCORE_Window_Wayland_SymbolSurfaceInterface        = bindings.WL_SURFACE_INTERFACE_SYMBOL
+)
+
 type (
 	// SYSCORE_Window_Wayland_Display is an opaque struct wl_display*.
 	SYSCORE_Window_Wayland_Display = bindings.WlDisplay

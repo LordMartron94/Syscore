@@ -32,6 +32,8 @@ Build with CommandManifestAdd* helpers, then pass to SYSCORE_Window_Xcb_Commands
 */
 type SYSCORE_Window_Xcb_CommandManifest = loader.XcbCommandManifest
 
+const SYSCORE_Window_Xcb_WindowClassInputOutput = bindings.XCB_WINDOW_CLASS_INPUT_OUTPUT
+
 type (
 	// SYSCORE_Window_Xcb_ConnectionT is an opaque xcb_connection_t* (uintptr).
 	SYSCORE_Window_Xcb_ConnectionT = bindings.XcbConnectionT

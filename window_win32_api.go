@@ -27,11 +27,24 @@ SYSCORE_Window_Win32_CommandManifest lists Win32 entry points for selective bind
 */
 type SYSCORE_Window_Win32_CommandManifest = loader.Win32CommandManifest
 
+const (
+	SYSCORE_Window_Win32_StyleOverlappedWindow = bindings.WS_OVERLAPPEDWINDOW
+	SYSCORE_Window_Win32_StyleExAppWindow      = bindings.WS_EX_APPWINDOW
+	SYSCORE_Window_Win32_UseDefault            = bindings.CW_USEDEFAULT
+	SYSCORE_Window_Win32_ClassStyleHRedraw     = bindings.CS_HREDRAW
+	SYSCORE_Window_Win32_ClassStyleVRedraw     = bindings.CS_VREDRAW
+	SYSCORE_Window_Win32_ColorWindow           = bindings.COLOR_WINDOW
+	SYSCORE_Window_Win32_CursorArrow           = bindings.IDC_ARROW
+	SYSCORE_Window_Win32_ShowWindow            = bindings.SW_SHOW
+)
+
 type (
 	// SYSCORE_Window_Win32_HWND is a Win32 window handle.
 	SYSCORE_Window_Win32_HWND = bindings.HWND
 	// SYSCORE_Window_Win32_HINSTANCE is a Win32 module instance handle.
 	SYSCORE_Window_Win32_HINSTANCE = bindings.HINSTANCE
+	// SYSCORE_Window_Win32_HBRUSH is a Win32 brush handle.
+	SYSCORE_Window_Win32_HBRUSH = bindings.HBRUSH
 	// SYSCORE_Window_Win32_WNDCLASSEXW is the WNDCLASSEXW structure for RegisterClassExW.
 	SYSCORE_Window_Win32_WNDCLASSEXW = bindings.WNDCLASSEXW
 	// SYSCORE_Window_Win32_PFN_GetModuleHandleW is the C type for GetModuleHandleW.

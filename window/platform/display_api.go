@@ -2,6 +2,8 @@ package platform
 
 import "fmt"
 
+//go:generate stringer -type DisplayAPI
+
 /*
 DisplayAPI identifies a native windowing / display client API for the current platform.
 */

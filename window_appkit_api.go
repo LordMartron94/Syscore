@@ -28,6 +28,20 @@ SYSCORE_Window_Appkit_CommandManifest lists Objective-C runtime entry points for
 */
 type SYSCORE_Window_Appkit_CommandManifest = loader.AppkitCommandManifest
 
+const (
+	SYSCORE_Window_Appkit_WindowStyleTitled         = bindings.NSWindowStyleMaskTitled
+	SYSCORE_Window_Appkit_WindowStyleClosable       = bindings.NSWindowStyleMaskClosable
+	SYSCORE_Window_Appkit_WindowStyleMiniaturizable = bindings.NSWindowStyleMaskMiniaturizable
+	SYSCORE_Window_Appkit_WindowStyleResizable      = bindings.NSWindowStyleMaskResizable
+	SYSCORE_Window_Appkit_BackingStoreBuffered      = bindings.NSBackingStoreBuffered
+	SYSCORE_Window_Appkit_ClassNSApplication        = bindings.ObjCClassNSApplication
+	SYSCORE_Window_Appkit_ClassNSWindow             = bindings.ObjCClassNSWindow
+	SYSCORE_Window_Appkit_SelSharedApplication      = bindings.ObjCSelSharedApplication
+	SYSCORE_Window_Appkit_SelAlloc                  = bindings.ObjCSelAlloc
+	SYSCORE_Window_Appkit_SelInitWindow             = bindings.ObjCSelInitWithContentRectStyleMaskBackingDefer
+	SYSCORE_Window_Appkit_SelMakeKeyAndOrderFront   = bindings.ObjCSelMakeKeyAndOrderFront
+)
+
 type (
 	// SYSCORE_Window_Appkit_Object is an opaque Objective-C object (id).
 	SYSCORE_Window_Appkit_Object = bindings.ObjCObject
