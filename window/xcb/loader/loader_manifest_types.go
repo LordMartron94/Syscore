@@ -74,7 +74,7 @@ func XcbCommandManifestAddChangeProperty(manifest *XcbCommandManifest, target *b
 	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldChangeProperty, target)
 }
 
-func XcbCommandManifestAddFree(manifest *XcbCommandManifest, target *bindings.PFN_xcb_free) error {
+func XcbCommandManifestAddFree(manifest *XcbCommandManifest, target *bindings.PFN_c_free) error {
 	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldFree, target)
 }
 

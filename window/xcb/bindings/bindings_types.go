@@ -224,12 +224,13 @@ type PFN_xcb_change_property func(
 ) XcbVoidCookieT
 
 /*
-PFN_xcb_free releases memory returned by XCB reply functions.
+PFN_c_free releases heap memory (libc free).
 
 [Context]
-Maps to xcb_free. Call on pointers from InternAtomReply after reading fields.
+XCB reply functions such as xcb_intern_atom_reply return malloc'd buffers; libxcb does not export
+xcb_free on all platforms. Bind this from libc.so.6 and call on reply pointers after reading fields.
 */
-type PFN_xcb_free func(ptr uintptr)
+type PFN_c_free func(ptr uintptr)
 
 /*
 PFN_xcb_flush flushes the output buffer to the X server.

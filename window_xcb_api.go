@@ -75,8 +75,8 @@ type (
 	SYSCORE_Window_Xcb_PFN_intern_atom_reply = bindings.PFN_xcb_intern_atom_reply
 	// SYSCORE_Window_Xcb_PFN_change_property is the C type for xcb_change_property.
 	SYSCORE_Window_Xcb_PFN_change_property = bindings.PFN_xcb_change_property
-	// SYSCORE_Window_Xcb_PFN_free is the C type for xcb_free.
-	SYSCORE_Window_Xcb_PFN_free = bindings.PFN_xcb_free
+	// SYSCORE_Window_Xcb_PFN_free is the C type for libc free(3) on XCB reply buffers.
+	SYSCORE_Window_Xcb_PFN_free = bindings.PFN_c_free
 )
 
 /*
@@ -256,7 +256,7 @@ func SYSCORE_Window_Xcb_CommandManifestAddChangeProperty(manifest *SYSCORE_Windo
 }
 
 /*
-SYSCORE_Window_Xcb_CommandManifestAddFree registers xcb_free for selective loading.
+SYSCORE_Window_Xcb_CommandManifestAddFree registers libc free for selective loading (XCB reply release).
 */
 func SYSCORE_Window_Xcb_CommandManifestAddFree(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_free) error {
 	return loader.XcbCommandManifestAddFree(manifest, target)

@@ -51,7 +51,7 @@ type XcbCommands struct {
 	*/
 	ChangeProperty bindings.PFN_xcb_change_property
 	/*
-		Free is xcb_free. Releases reply buffers from InternAtomReply.
+		Free is libc free(3). Releases malloc'd reply buffers from InternAtomReply.
 	*/
-	Free bindings.PFN_xcb_free
+	Free bindings.PFN_c_free
 }
