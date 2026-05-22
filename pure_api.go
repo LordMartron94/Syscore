@@ -35,3 +35,10 @@ An error is produced if the type is not a function pointer or if the function re
 func SYSCORE_Pure_FunctionBindAddress(targetFn any, address uintptr) error {
 	return internal.FunctionBindAddress(targetFn, address)
 }
+
+/*
+SYSCORE_Pure_LibrarySymbolResolve returns the address of an exported symbol in a loaded library.
+*/
+func SYSCORE_Pure_LibrarySymbolResolve(library SYSCORE_Pure_DynamicLibrary, symbolName string) (uintptr, error) {
+	return internal.DynamicLibrarySymbolResolve(library, symbolName)
+}

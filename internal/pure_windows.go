@@ -11,3 +11,11 @@ func loadPlatformLibrary(name string) (uintptr, error) {
 	}
 	return uintptr(handle), nil
 }
+
+func platformLibrarySymbolResolve(library DynamicLibrary, symbolName string) (uintptr, error) {
+	proc, err := windows.GetProcAddress(windows.Handle(library), symbolName)
+	if err != nil {
+		return 0, err
+	}
+	return proc, nil
+}

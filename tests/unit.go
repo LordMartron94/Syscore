@@ -1,9 +1,6 @@
 package tests
 
-import (
-	"shield"
-	"syscore"
-)
+import "shield"
 
 var standardRunCfg = shield.SHIELD_Testing_ScenarioRunConfig{
 	MaxIterations: 1,
@@ -15,7 +12,7 @@ func init() {
 		"A dummy operation for testing/debugging some syscore stuff",
 		func(_ struct{}, execCtx shield.SHIELD_Testing_ExecutionContext) []shield.SHIELD_Testing_ScenarioRunResult {
 			return []shield.SHIELD_Testing_ScenarioRunResult{
-				runWindowTestingScenario(execCtx),
+				runDummyScenario(execCtx),
 			}
 		},
 		"SYSCORE", "Dummy",
@@ -24,13 +21,13 @@ func init() {
 	shield.SHIELD_Registry_OperationRegister(mainOperation)
 }
 
-func runWindowTestingScenario(execCtx shield.SHIELD_Testing_ExecutionContext) shield.SHIELD_Testing_ScenarioRunResult {
+func runDummyScenario(execCtx shield.SHIELD_Testing_ExecutionContext) shield.SHIELD_Testing_ScenarioRunResult {
 	type scenarioInput struct{}
 	type scenarioOutput struct{}
 
 	scenario := shield.SHIELD_Testing_ScenarioCreate[scenarioInput, scenarioOutput](
-		"scenario_dummy_windowing",
-		"Debugs the available windowing APIs",
+		"scenario_dummy",
+		"Placeholder SYSCORE SHIELD scenario",
 		[]shield.SHIELD_Testing_Guard[scenarioInput, scenarioOutput]{
 			shield.SHIELD_Testing_GuardCreate(
 				"guard_dummy",
@@ -39,7 +36,6 @@ func runWindowTestingScenario(execCtx shield.SHIELD_Testing_ExecutionContext) sh
 			),
 		},
 		func(input scenarioInput) (output scenarioOutput, error error) {
-			syscore.SYSCORE_Window_WindowTest()
 			return scenarioOutput{}, nil
 		},
 	)

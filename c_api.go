@@ -33,3 +33,19 @@ SYSCORE_C_CStringToString converts a null-terminated C string into a standard Go
 func SYSCORE_C_CStringToString(str []byte) string {
 	return internal.CStringToString(str)
 }
+
+/*
+SYSCORE_C_CStringPointerToString converts a NUL-terminated C string pointer into a Go string.
+*/
+func SYSCORE_C_CStringPointerToString(ptr uintptr) string {
+	return internal.CStringPointerToString(ptr)
+}
+
+/*
+SYSCORE_C_StringToUTF16 converts a Go string to a NUL-terminated UTF-16 string for Win32 APIs.
+
+It returns both the code unit slice and a pointer to the first element.
+*/
+func SYSCORE_C_StringToUTF16(str string) ([]uint16, *uint16) {
+	return internal.StringToUTF16(str)
+}

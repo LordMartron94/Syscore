@@ -29,7 +29,7 @@ func LibraryFunctionBind(library DynamicLibrary, targetFn any, functionName stri
 }
 
 func DynamicLibrarySymbolResolve(library DynamicLibrary, symbolName string) (uintptr, error) {
-	return purego.Dlsym(uintptr(library), symbolName)
+	return platformLibrarySymbolResolve(library, symbolName)
 }
 
 func FunctionBindAddress(targetFn any, address uintptr) (err error) {

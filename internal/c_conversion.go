@@ -1,6 +1,9 @@
 package internal
 
-import "unsafe"
+import (
+	"unicode/utf16"
+	"unsafe"
+)
 
 func StringToCString(str string) ([]byte, *byte) {
 	b := append([]byte(str), 0)
@@ -33,4 +36,10 @@ func CStringPointerToString(ptr uintptr) string {
 	}
 	slice := unsafe.Slice((*byte)(start), length)
 	return string(slice)
+}
+
+func StringToUTF16(str string) ([]uint16, *uint16) {
+	encoded := utf16.Encode([]rune(str))
+	encoded = append(encoded, 0)
+	return encoded, &encoded[0]
 }
