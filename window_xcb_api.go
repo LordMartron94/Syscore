@@ -77,6 +77,10 @@ type (
 	SYSCORE_Window_Xcb_PFN_change_property = bindings.PFN_xcb_change_property
 	// SYSCORE_Window_Xcb_PFN_free is the C type for libc free(3) on XCB reply buffers.
 	SYSCORE_Window_Xcb_PFN_free = bindings.PFN_c_free
+	// SYSCORE_Window_Xcb_PFN_destroy_window is the C type for xcb_destroy_window.
+	SYSCORE_Window_Xcb_PFN_destroy_window = bindings.PFN_xcb_destroy_window
+	// SYSCORE_Window_Xcb_PFN_disconnect is the C type for xcb_disconnect.
+	SYSCORE_Window_Xcb_PFN_disconnect = bindings.PFN_xcb_disconnect
 )
 
 /*
@@ -260,4 +264,18 @@ SYSCORE_Window_Xcb_CommandManifestAddFree registers libc free for selective load
 */
 func SYSCORE_Window_Xcb_CommandManifestAddFree(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_free) error {
 	return loader.XcbCommandManifestAddFree(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddDestroyWindow registers xcb_destroy_window for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddDestroyWindow(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_destroy_window) error {
+	return loader.XcbCommandManifestAddDestroyWindow(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddDisconnect registers xcb_disconnect for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddDisconnect(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_disconnect) error {
+	return loader.XcbCommandManifestAddDisconnect(manifest, target)
 }

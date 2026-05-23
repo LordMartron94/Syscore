@@ -120,6 +120,22 @@ Return value depends on the request (often unused).
 type PFN_wl_proxy_marshal func(proxy WlProxy, opcode uint32, args ...any) WlProxy
 
 /*
+PFN_wl_proxy_destroy destroys a Wayland proxy and its protocol objects.
+
+[Context]
+Maps to wl_proxy_destroy. Call on toplevel, xdg_surface, and wl_surface before disconnecting the display.
+*/
+type PFN_wl_proxy_destroy func(proxy WlProxy)
+
+/*
+PFN_wl_display_disconnect closes a connection to the Wayland compositor.
+
+[Context]
+Maps to wl_display_disconnect. Call after destroying surface proxies.
+*/
+type PFN_wl_display_disconnect func(display WlDisplay)
+
+/*
 PFN_wl_display_roundtrip blocks until pending requests are processed and events dispatched.
 
 [Context]

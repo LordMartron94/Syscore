@@ -20,6 +20,8 @@ func waylandCommandMappingsAll(commands *WaylandCommands) []loadutil.CommandMapp
 		{Target: &commands.ProxyAddListener, Name: "wl_proxy_add_listener"},
 		{Target: &commands.DisplayRoundtrip, Name: "wl_display_roundtrip"},
 		{Target: &commands.ProxyMarshal, Name: "wl_proxy_marshal"},
+		{Target: &commands.ProxyDestroy, Name: "wl_proxy_destroy"},
+		{Target: &commands.DisplayDisconnect, Name: "wl_display_disconnect"},
 	}
 }
 

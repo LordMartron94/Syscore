@@ -63,6 +63,8 @@ type (
 	SYSCORE_Window_Win32_PFN_UpdateWindow = bindings.PFN_UpdateWindow
 	// SYSCORE_Window_Win32_PFN_LoadCursorW is the C type for LoadCursorW.
 	SYSCORE_Window_Win32_PFN_LoadCursorW = bindings.PFN_LoadCursorW
+	// SYSCORE_Window_Win32_PFN_DestroyWindow is the C type for DestroyWindow.
+	SYSCORE_Window_Win32_PFN_DestroyWindow = bindings.PFN_DestroyWindow
 )
 
 /*
@@ -187,6 +189,13 @@ SYSCORE_Window_Win32_CommandManifestAddLoadCursorW registers LoadCursorW for sel
 */
 func SYSCORE_Window_Win32_CommandManifestAddLoadCursorW(manifest *SYSCORE_Window_Win32_CommandManifest, target *SYSCORE_Window_Win32_PFN_LoadCursorW) error {
 	return loader.Win32CommandManifestAddLoadCursorW(manifest, target)
+}
+
+/*
+SYSCORE_Window_Win32_CommandManifestAddDestroyWindow registers DestroyWindow for selective loading.
+*/
+func SYSCORE_Window_Win32_CommandManifestAddDestroyWindow(manifest *SYSCORE_Window_Win32_CommandManifest, target *SYSCORE_Window_Win32_PFN_DestroyWindow) error {
+	return loader.Win32CommandManifestAddDestroyWindow(manifest, target)
 }
 
 /*

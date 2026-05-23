@@ -63,6 +63,10 @@ type (
 	SYSCORE_Window_Wayland_PFN_display_roundtrip = bindings.PFN_wl_display_roundtrip
 	// SYSCORE_Window_Wayland_PFN_proxy_marshal is the C type for wl_proxy_marshal.
 	SYSCORE_Window_Wayland_PFN_proxy_marshal = bindings.PFN_wl_proxy_marshal
+	// SYSCORE_Window_Wayland_PFN_proxy_destroy is the C type for wl_proxy_destroy.
+	SYSCORE_Window_Wayland_PFN_proxy_destroy = bindings.PFN_wl_proxy_destroy
+	// SYSCORE_Window_Wayland_PFN_display_disconnect is the C type for wl_display_disconnect.
+	SYSCORE_Window_Wayland_PFN_display_disconnect = bindings.PFN_wl_display_disconnect
 )
 
 /*
@@ -180,4 +184,18 @@ SYSCORE_Window_Wayland_CommandManifestAddProxyMarshal registers wl_proxy_marshal
 */
 func SYSCORE_Window_Wayland_CommandManifestAddProxyMarshal(manifest *SYSCORE_Window_Wayland_CommandManifest, target *SYSCORE_Window_Wayland_PFN_proxy_marshal) error {
 	return loader.WaylandCommandManifestAddProxyMarshal(manifest, target)
+}
+
+/*
+SYSCORE_Window_Wayland_CommandManifestAddProxyDestroy registers wl_proxy_destroy for selective loading.
+*/
+func SYSCORE_Window_Wayland_CommandManifestAddProxyDestroy(manifest *SYSCORE_Window_Wayland_CommandManifest, target *SYSCORE_Window_Wayland_PFN_proxy_destroy) error {
+	return loader.WaylandCommandManifestAddProxyDestroy(manifest, target)
+}
+
+/*
+SYSCORE_Window_Wayland_CommandManifestAddDisplayDisconnect registers wl_display_disconnect for selective loading.
+*/
+func SYSCORE_Window_Wayland_CommandManifestAddDisplayDisconnect(manifest *SYSCORE_Window_Wayland_CommandManifest, target *SYSCORE_Window_Wayland_PFN_display_disconnect) error {
+	return loader.WaylandCommandManifestAddDisplayDisconnect(manifest, target)
 }

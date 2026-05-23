@@ -38,4 +38,8 @@ type Win32Commands struct {
 		LoadCursorW is LoadCursorW (user32). Loads a cursor (for example IDC_ARROW).
 	*/
 	LoadCursorW bindings.PFN_LoadCursorW
+	/*
+		DestroyWindow is DestroyWindow (user32). Destroys an HWND created with CreateWindowExW.
+	*/
+	DestroyWindow bindings.PFN_DestroyWindow
 }

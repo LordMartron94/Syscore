@@ -35,4 +35,6 @@ const (
 	ObjCSelStringWithUTF8String = "stringWithUTF8String:"
 	// ObjCSelSetTitle is the NSWindow instance method -setTitle:.
 	ObjCSelSetTitle = "setTitle:"
+	// ObjCSelClose is the NSWindow instance method -close.
+	ObjCSelClose = "close"
 )

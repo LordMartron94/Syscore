@@ -45,6 +45,7 @@ const (
 	SYSCORE_Window_Appkit_SelMakeKeyAndOrderFront   = bindings.ObjCSelMakeKeyAndOrderFront
 	SYSCORE_Window_Appkit_SelStringWithUTF8String   = bindings.ObjCSelStringWithUTF8String
 	SYSCORE_Window_Appkit_SelSetTitle               = bindings.ObjCSelSetTitle
+	SYSCORE_Window_Appkit_SelClose                  = bindings.ObjCSelClose
 )
 
 type (

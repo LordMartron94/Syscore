@@ -21,6 +21,8 @@ const (
 	XcbCommandManifestFieldInternAtomReply
 	XcbCommandManifestFieldChangeProperty
 	XcbCommandManifestFieldFree
+	XcbCommandManifestFieldDestroyWindow
+	XcbCommandManifestFieldDisconnect
 )
 
 type XcbCommandManifest struct {
@@ -76,6 +78,14 @@ func XcbCommandManifestAddChangeProperty(manifest *XcbCommandManifest, target *b
 
 func XcbCommandManifestAddFree(manifest *XcbCommandManifest, target *bindings.PFN_c_free) error {
 	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldFree, target)
+}
+
+func XcbCommandManifestAddDestroyWindow(manifest *XcbCommandManifest, target *bindings.PFN_xcb_destroy_window) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldDestroyWindow, target)
+}
+
+func XcbCommandManifestAddDisconnect(manifest *XcbCommandManifest, target *bindings.PFN_xcb_disconnect) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldDisconnect, target)
 }
 
 func xcbCommandManifestAdd(manifest *XcbCommandManifest, field XcbCommandManifestField, target any) error {

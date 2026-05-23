@@ -154,3 +154,11 @@ PFN_LoadCursorW loads a stock or custom cursor.
 Maps to LoadCursorW. Pass hInstance 0 and lpCursorName IDC_ARROW for the default arrow.
 */
 type PFN_LoadCursorW func(hInstance HINSTANCE, lpCursorName uintptr) HCURSOR
+
+/*
+PFN_DestroyWindow destroys a Win32 window.
+
+[Context]
+Maps to DestroyWindow. Call before process exit to remove the HWND from the desktop.
+*/
+type PFN_DestroyWindow func(hWnd HWND) int32

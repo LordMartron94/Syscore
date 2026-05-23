@@ -54,4 +54,12 @@ type XcbCommands struct {
 		Free is libc free(3). Releases malloc'd reply buffers from InternAtomReply.
 	*/
 	Free bindings.PFN_c_free
+	/*
+		DestroyWindow is xcb_destroy_window. Destroys a window (unchecked cookie).
+	*/
+	DestroyWindow bindings.PFN_xcb_destroy_window
+	/*
+		Disconnect is xcb_disconnect. Closes the XCB connection.
+	*/
+	Disconnect bindings.PFN_xcb_disconnect
 }

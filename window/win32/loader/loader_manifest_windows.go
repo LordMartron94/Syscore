@@ -34,6 +34,8 @@ func Win32CommandsLoadManifest(module Win32Module, manifest *Win32CommandManifes
 			user32Mappings = append(user32Mappings, loadutil.CommandMapping{Target: &commands.UpdateWindow, Name: "UpdateWindow"})
 		case Win32CommandManifestFieldLoadCursorW:
 			user32Mappings = append(user32Mappings, loadutil.CommandMapping{Target: &commands.LoadCursorW, Name: "LoadCursorW"})
+		case Win32CommandManifestFieldDestroyWindow:
+			user32Mappings = append(user32Mappings, loadutil.CommandMapping{Target: &commands.DestroyWindow, Name: "DestroyWindow"})
 		default:
 			return fmt.Errorf("win32 loader: unknown manifest field %d", field)
 		}

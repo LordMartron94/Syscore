@@ -34,4 +34,12 @@ type WaylandCommands struct {
 		ProxyMarshal is wl_proxy_marshal. Sends requests on existing proxies (xdg title, ack_configure, etc.).
 	*/
 	ProxyMarshal bindings.PFN_wl_proxy_marshal
+	/*
+		ProxyDestroy is wl_proxy_destroy. Destroys Wayland protocol objects.
+	*/
+	ProxyDestroy bindings.PFN_wl_proxy_destroy
+	/*
+		DisplayDisconnect is wl_display_disconnect. Closes the compositor connection.
+	*/
+	DisplayDisconnect bindings.PFN_wl_display_disconnect
 }

@@ -28,6 +28,8 @@ func xcbCommandMappingsAll(commands *XcbCommands) []loadutil.CommandMapping {
 		{Target: &commands.InternAtomReply, Name: "xcb_intern_atom_reply"},
 		{Target: &commands.ChangeProperty, Name: "xcb_change_property"},
 		{Target: &commands.Free, Name: "free"},
+		{Target: &commands.DestroyWindow, Name: "xcb_destroy_window"},
+		{Target: &commands.Disconnect, Name: "xcb_disconnect"},
 	}
 }
 

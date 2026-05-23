@@ -17,6 +17,7 @@ const (
 	Win32CommandManifestFieldShowWindow
 	Win32CommandManifestFieldUpdateWindow
 	Win32CommandManifestFieldLoadCursorW
+	Win32CommandManifestFieldDestroyWindow
 )
 
 type Win32CommandManifest struct {
@@ -56,6 +57,10 @@ func Win32CommandManifestAddUpdateWindow(manifest *Win32CommandManifest, target 
 
 func Win32CommandManifestAddLoadCursorW(manifest *Win32CommandManifest, target *bindings.PFN_LoadCursorW) error {
 	return win32CommandManifestAdd(manifest, Win32CommandManifestFieldLoadCursorW, target)
+}
+
+func Win32CommandManifestAddDestroyWindow(manifest *Win32CommandManifest, target *bindings.PFN_DestroyWindow) error {
+	return win32CommandManifestAdd(manifest, Win32CommandManifestFieldDestroyWindow, target)
 }
 
 func win32CommandManifestAdd(manifest *Win32CommandManifest, field Win32CommandManifestField, target any) error {

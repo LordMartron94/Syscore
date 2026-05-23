@@ -233,6 +233,22 @@ xcb_free on all platforms. Bind this from libc.so.6 and call on reply pointers a
 type PFN_c_free func(ptr uintptr)
 
 /*
+PFN_xcb_destroy_window destroys an X window (unchecked).
+
+[Context]
+Maps to xcb_destroy_window. Pair with Flush so the request reaches the server.
+*/
+type PFN_xcb_destroy_window func(c XcbConnectionT, window XcbWindowT) XcbVoidCookieT
+
+/*
+PFN_xcb_disconnect closes an XCB connection and frees associated resources.
+
+[Context]
+Maps to xcb_disconnect. Call after destroying windows on the connection.
+*/
+type PFN_xcb_disconnect func(c XcbConnectionT) int32
+
+/*
 PFN_xcb_flush flushes the output buffer to the X server.
 
 [Context]

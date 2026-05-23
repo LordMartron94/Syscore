@@ -41,6 +41,10 @@ func XcbCommandsLoadManifest(module XcbModule, manifest *XcbCommandManifest, com
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.ChangeProperty, Name: "xcb_change_property"})
 		case XcbCommandManifestFieldFree:
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.Free, Name: "free"})
+		case XcbCommandManifestFieldDestroyWindow:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.DestroyWindow, Name: "xcb_destroy_window"})
+		case XcbCommandManifestFieldDisconnect:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.Disconnect, Name: "xcb_disconnect"})
 		default:
 			return fmt.Errorf("xcb loader: unknown manifest field %d", field)
 		}

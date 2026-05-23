@@ -21,6 +21,7 @@ func win32CommandMappingsAll(commands *Win32Commands) (user32 []loadutil.Command
 		{Target: &commands.ShowWindow, Name: "ShowWindow"},
 		{Target: &commands.UpdateWindow, Name: "UpdateWindow"},
 		{Target: &commands.LoadCursorW, Name: "LoadCursorW"},
+		{Target: &commands.DestroyWindow, Name: "DestroyWindow"},
 	}
 	kernel32 = []loadutil.CommandMapping{
 		{Target: &commands.GetModuleHandleW, Name: "GetModuleHandleW"},
