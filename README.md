@@ -57,6 +57,7 @@ Wraps [purego](https://github.com/ebitengine/purego) for `dlopen` / `dlsym` styl
 | `SYSCORE_Pure_LibraryFunctionBind` | Bind an exported symbol name to a Go function pointer |
 | `SYSCORE_Pure_LibrarySymbolResolve` | Resolve symbol address without binding |
 | `SYSCORE_Pure_FunctionBindAddress` | Bind a known address to a Go function pointer |
+| `SYSCORE_Pure_FunctionPointerAddressSet` | Write a raw native callback address into a function-pointer slot |
 
 Use these when integrating libraries that are not covered by the window loaders (Vulkan ICD resolution in `gpuarch` follows this pattern).
 

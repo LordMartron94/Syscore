@@ -145,3 +145,33 @@ Callback slots are process-lifetime limited; memory is not released.
 func SYSCORE_Pure_NewCallback(fn any) uintptr {
 	return internal.PlatformNewCallback(fn)
 }
+
+/*
+SYSCORE_Pure_FunctionPointerAddressSet writes a native function address directly into a function-pointer slot.
+
+[Context]
+Use this for callback fields inside native struct mirrors where the native API will call back into Go through a
+SYSCORE_Pure_NewCallback trampoline address. This avoids creating a Go callable wrapper, which is what
+SYSCORE_Pure_FunctionBindAddress does.
+
+[Parameters]
+targetFnPointer - Pointer to a function-typed field or variable that stores a native callback address.
+address - Native function address (for example return value from SYSCORE_Pure_NewCallback).
+
+[Returns]
+nil on success.
+
+[Errors]
+Returns an error if targetFnPointer is nil, not a pointer to a function value, or address is zero.
+
+[Side Effects]
+Mutates the function-pointer slot at targetFnPointer by writing address directly.
+
+[Example]
+
+	callbackAddress := syscore.SYSCORE_Pure_NewCallback(myCallback)
+	err := syscore.SYSCORE_Pure_FunctionPointerAddressSet(&createInfo.PfnUserCallback, callbackAddress)
+*/
+func SYSCORE_Pure_FunctionPointerAddressSet(targetFnPointer any, address uintptr) error {
+	return internal.FunctionPointerAddressSet(targetFnPointer, address)
+}
