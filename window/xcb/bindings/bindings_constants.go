@@ -36,6 +36,27 @@ XCB_ATOM_WM_SIZE_HINTS is the WM_SIZE_HINTS type atom name for WM_NORMAL_HINTS v
 const XCB_ATOM_WM_SIZE_HINTS = "WM_SIZE_HINTS"
 
 const (
+	XCB_ATOM_WM_PROTOCOLS     = "WM_PROTOCOLS"
+	XCB_ATOM_WM_DELETE_WINDOW = "WM_DELETE_WINDOW"
+)
+
+const (
+	// XCB_EVENT_CLIENT_MESSAGE is the response type for ClientMessage events.
+	XCB_EVENT_CLIENT_MESSAGE uint8 = 33
+	// XCB_EVENT_DESTROY_NOTIFY is the response type for DestroyNotify events.
+	XCB_EVENT_DESTROY_NOTIFY uint8 = 17
+)
+
+const (
+	// XcbClientMessageEventWindowOffset is the byte offset of window in xcb_client_message_event_t.
+	XcbClientMessageEventWindowOffset = 4
+	// XcbClientMessageEventData32Offset is the byte offset of data32[0] in xcb_client_message_event_t.
+	XcbClientMessageEventData32Offset = 24
+	// XcbDestroyNotifyEventWindowOffset is the byte offset of window in xcb_destroy_notify_event_t.
+	XcbDestroyNotifyEventWindowOffset = 8
+)
+
+const (
 	// XCB_SIZE_HINTS_FLAG_PSIZE sets width and height in xcb_size_hints_t.
 	XCB_SIZE_HINTS_FLAG_PSIZE int32 = 1 << 2
 	// XCB_SIZE_HINTS_FLAG_PMIN_SIZE sets min_width and min_height in xcb_size_hints_t.

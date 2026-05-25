@@ -31,6 +31,10 @@ type WaylandCommands struct {
 	*/
 	DisplayRoundtrip bindings.PFN_wl_display_roundtrip
 	/*
+		DisplayDispatchPending is wl_display_dispatch_pending. Dispatches queued events without blocking.
+	*/
+	DisplayDispatchPending bindings.PFN_wl_display_dispatch_pending
+	/*
 		ProxyMarshal is wl_proxy_marshal. Sends requests on existing proxies (xdg title, ack_configure, etc.).
 	*/
 	ProxyMarshal bindings.PFN_wl_proxy_marshal

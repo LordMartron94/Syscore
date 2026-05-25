@@ -249,6 +249,14 @@ Maps to xcb_disconnect. Call after destroying windows on the connection.
 type PFN_xcb_disconnect func(c XcbConnectionT) int32
 
 /*
+PFN_xcb_poll_for_event returns the next queued XCB event, or nil when the queue is empty.
+
+[Context]
+Maps to xcb_poll_for_event. Free the returned pointer with libc free when done.
+*/
+type PFN_xcb_poll_for_event func(c XcbConnectionT) uintptr
+
+/*
 XcbSizeHints is the xcb_size_hints_t layout for WM_NORMAL_HINTS (ICCCM).
 
 [Context]

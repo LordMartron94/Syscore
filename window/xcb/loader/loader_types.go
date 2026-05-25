@@ -62,4 +62,8 @@ type XcbCommands struct {
 		Disconnect is xcb_disconnect. Closes the XCB connection.
 	*/
 	Disconnect bindings.PFN_xcb_disconnect
+	/*
+		PollForEvent is xcb_poll_for_event. Returns the next queued event or nil.
+	*/
+	PollForEvent bindings.PFN_xcb_poll_for_event
 }

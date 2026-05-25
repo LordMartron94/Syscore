@@ -148,3 +148,15 @@ display - Display connection.
 0 on success, negative on error.
 */
 type PFN_wl_display_roundtrip func(display WlDisplay) int32
+
+/*
+PFN_wl_display_dispatch_pending dispatches events already read from the display fd without blocking.
+
+[Context]
+Maps to wl_display_dispatch_pending. Call from a frame or idle loop to deliver listener callbacks
+(for example xdg_toplevel.close) without a full roundtrip.
+
+[Returns]
+0 on success, negative on error.
+*/
+type PFN_wl_display_dispatch_pending func(display WlDisplay) int32
