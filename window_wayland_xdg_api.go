@@ -41,6 +41,8 @@ type (
 	SYSCORE_Window_Wayland_Xdg_Toplevel = bindings.XdgToplevel
 	// SYSCORE_Window_Wayland_Xdg_SurfaceListener is the xdg_surface_listener layout for ProxyAddListener.
 	SYSCORE_Window_Wayland_Xdg_SurfaceListener = bindings.XdgSurfaceListener
+	// SYSCORE_Window_Wayland_Xdg_ToplevelListener is the xdg_toplevel_listener layout for ProxyAddListener.
+	SYSCORE_Window_Wayland_Xdg_ToplevelListener = bindings.XdgToplevelListener
 )
 
 /*

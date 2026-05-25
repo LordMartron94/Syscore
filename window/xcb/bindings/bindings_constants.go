@@ -36,12 +36,12 @@ XCB_ATOM_WM_SIZE_HINTS is the WM_SIZE_HINTS type atom name for WM_NORMAL_HINTS v
 const XCB_ATOM_WM_SIZE_HINTS = "WM_SIZE_HINTS"
 
 const (
-	// XCB_SIZE_HINTS_FLAG_PSIZE sets width and height in XSizeHints.
-	XCB_SIZE_HINTS_FLAG_PSIZE int64 = 1 << 2
-	// XCB_SIZE_HINTS_FLAG_PMIN_SIZE sets min_width and min_height in XSizeHints.
-	XCB_SIZE_HINTS_FLAG_PMIN_SIZE int64 = 1 << 4
-	// XCB_SIZE_HINTS_FLAG_PMAX_SIZE sets max_width and max_height in XSizeHints.
-	XCB_SIZE_HINTS_FLAG_PMAX_SIZE int64 = 1 << 5
+	// XCB_SIZE_HINTS_FLAG_PSIZE sets width and height in xcb_size_hints_t.
+	XCB_SIZE_HINTS_FLAG_PSIZE int32 = 1 << 2
+	// XCB_SIZE_HINTS_FLAG_PMIN_SIZE sets min_width and min_height in xcb_size_hints_t.
+	XCB_SIZE_HINTS_FLAG_PMIN_SIZE int32 = 1 << 4
+	// XCB_SIZE_HINTS_FLAG_PMAX_SIZE sets max_width and max_height in xcb_size_hints_t.
+	XCB_SIZE_HINTS_FLAG_PMAX_SIZE int32 = 1 << 5
 )
 
 /*

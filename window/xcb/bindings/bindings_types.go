@@ -249,14 +249,15 @@ Maps to xcb_disconnect. Call after destroying windows on the connection.
 type PFN_xcb_disconnect func(c XcbConnectionT) int32
 
 /*
-XcbSizeHints is the XSizeHints layout for WM_NORMAL_HINTS (ICCCM).
+XcbSizeHints is the xcb_size_hints_t layout for WM_NORMAL_HINTS (ICCCM).
 
 [Context]
-Matches the LP64 in-memory layout used by Xlib on Linux (80 bytes). Pass to xcb_change_property
+XCB sends WM_NORMAL_HINTS as format-32 property data (18 consecutive 32-bit words). This is not
+the Xlib XSizeHints in-memory layout (LP64 long flags are 64-bit). Pass to xcb_change_property
 with format 32 and data length SizeHintsPropertyWordCount.
 */
 type XcbSizeHints struct {
-	Flags        int64
+	Flags        int32
 	X            int32
 	Y            int32
 	Width        int32
@@ -279,7 +280,7 @@ type XcbSizeHints struct {
 /*
 XcbSizeHintsPropertyWordCount is the xcb_change_property data length (32-bit units) for XcbSizeHints.
 */
-const XcbSizeHintsPropertyWordCount uint32 = 20
+const XcbSizeHintsPropertyWordCount uint32 = 18
 
 /*
 PFN_xcb_flush flushes the output buffer to the X server.

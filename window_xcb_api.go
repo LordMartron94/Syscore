@@ -87,7 +87,7 @@ type (
 	SYSCORE_Window_Xcb_PFN_destroy_window = bindings.PFN_xcb_destroy_window
 	// SYSCORE_Window_Xcb_PFN_disconnect is the C type for xcb_disconnect.
 	SYSCORE_Window_Xcb_PFN_disconnect = bindings.PFN_xcb_disconnect
-	// SYSCORE_Window_Xcb_SizeHints is the XSizeHints layout for WM_NORMAL_HINTS.
+	// SYSCORE_Window_Xcb_SizeHints is the xcb_size_hints_t layout for WM_NORMAL_HINTS.
 	SYSCORE_Window_Xcb_SizeHints = bindings.XcbSizeHints
 )
 

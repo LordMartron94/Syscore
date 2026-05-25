@@ -23,3 +23,14 @@ Configure is a purego callback invoked as (data, xdgSurface, serial).
 type XdgSurfaceListener struct {
 	Configure uintptr
 }
+
+/*
+XdgToplevelListener is the xdg_toplevel_listener vtable for wl_proxy_add_listener.
+
+Configure is invoked as (data, xdgToplevel, width, height, states). Close is (data, xdgToplevel).
+Unset entries must be 0.
+*/
+type XdgToplevelListener struct {
+	Configure uintptr
+	Close     uintptr
+}
