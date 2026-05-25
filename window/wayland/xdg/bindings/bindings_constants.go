@@ -25,4 +25,6 @@ const (
 	XDG_TOPLEVEL_SET_TITLE_OPCODE uint32 = 2
 	// XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE is xdg_toplevel.set_min_size.
 	XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE uint32 = 8
+	// XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE is xdg_toplevel.set_max_size.
+	XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE uint32 = 9
 )

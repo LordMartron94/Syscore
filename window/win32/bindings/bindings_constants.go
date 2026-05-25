@@ -5,6 +5,8 @@ import "unsafe"
 const (
 	// WS_OVERLAPPEDWINDOW is a common overlapped window style with caption and resize borders.
 	WS_OVERLAPPEDWINDOW uint32 = 0x00CF0000
+	// WS_OVERLAPPEDWINDOWFIXED is an overlapped window with caption and minimize, without resize borders.
+	WS_OVERLAPPEDWINDOWFIXED uint32 = 0x00CA0000
 	// WS_EX_APPWINDOW is an extended style that shows the window on the taskbar.
 	WS_EX_APPWINDOW uint32 = 0x00040000
 	// CW_USEDEFAULT lets the system choose position or size for CreateWindowExW.

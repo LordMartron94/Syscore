@@ -30,14 +30,15 @@ SYSCORE_Window_Win32_CommandManifest lists Win32 entry points for selective bind
 type SYSCORE_Window_Win32_CommandManifest = loader.Win32CommandManifest
 
 const (
-	SYSCORE_Window_Win32_StyleOverlappedWindow = bindings.WS_OVERLAPPEDWINDOW
-	SYSCORE_Window_Win32_StyleExAppWindow      = bindings.WS_EX_APPWINDOW
-	SYSCORE_Window_Win32_UseDefault            = bindings.CW_USEDEFAULT
-	SYSCORE_Window_Win32_ClassStyleHRedraw     = bindings.CS_HREDRAW
-	SYSCORE_Window_Win32_ClassStyleVRedraw     = bindings.CS_VREDRAW
-	SYSCORE_Window_Win32_ColorWindow           = bindings.COLOR_WINDOW
-	SYSCORE_Window_Win32_CursorArrow           = bindings.IDC_ARROW
-	SYSCORE_Window_Win32_ShowWindow            = bindings.SW_SHOW
+	SYSCORE_Window_Win32_StyleOverlappedWindow      = bindings.WS_OVERLAPPEDWINDOW
+	SYSCORE_Window_Win32_StyleOverlappedWindowFixed = bindings.WS_OVERLAPPEDWINDOWFIXED
+	SYSCORE_Window_Win32_StyleExAppWindow           = bindings.WS_EX_APPWINDOW
+	SYSCORE_Window_Win32_UseDefault                 = bindings.CW_USEDEFAULT
+	SYSCORE_Window_Win32_ClassStyleHRedraw          = bindings.CS_HREDRAW
+	SYSCORE_Window_Win32_ClassStyleVRedraw          = bindings.CS_VREDRAW
+	SYSCORE_Window_Win32_ColorWindow                = bindings.COLOR_WINDOW
+	SYSCORE_Window_Win32_CursorArrow                = bindings.IDC_ARROW
+	SYSCORE_Window_Win32_ShowWindow                 = bindings.SW_SHOW
 )
 
 type (

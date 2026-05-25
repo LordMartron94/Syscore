@@ -35,11 +35,16 @@ Build with CommandManifestAdd* helpers, then pass to SYSCORE_Window_Xcb_Commands
 type SYSCORE_Window_Xcb_CommandManifest = loader.XcbCommandManifest
 
 const (
-	SYSCORE_Window_Xcb_WindowClassInputOutput = bindings.XCB_WINDOW_CLASS_INPUT_OUTPUT
-	SYSCORE_Window_Xcb_PropModeReplace        = bindings.XCB_PROP_MODE_REPLACE
-	SYSCORE_Window_Xcb_AtomNameWMName         = bindings.XCB_ATOM_WM_NAME
-	SYSCORE_Window_Xcb_AtomNameNetWMName      = bindings.XCB_ATOM_NET_WM_NAME
-	SYSCORE_Window_Xcb_AtomNameUTF8String     = bindings.XCB_ATOM_UTF8_STRING
+	SYSCORE_Window_Xcb_WindowClassInputOutput     = bindings.XCB_WINDOW_CLASS_INPUT_OUTPUT
+	SYSCORE_Window_Xcb_PropModeReplace            = bindings.XCB_PROP_MODE_REPLACE
+	SYSCORE_Window_Xcb_AtomNameWMName             = bindings.XCB_ATOM_WM_NAME
+	SYSCORE_Window_Xcb_AtomNameNetWMName          = bindings.XCB_ATOM_NET_WM_NAME
+	SYSCORE_Window_Xcb_AtomNameUTF8String         = bindings.XCB_ATOM_UTF8_STRING
+	SYSCORE_Window_Xcb_AtomNameWMNormalHints      = bindings.XCB_ATOM_WM_NORMAL_HINTS
+	SYSCORE_Window_Xcb_AtomNameWMSizeHints        = bindings.XCB_ATOM_WM_SIZE_HINTS
+	SYSCORE_Window_Xcb_SizeHintsFlagPMinSize      = bindings.XCB_SIZE_HINTS_FLAG_PMIN_SIZE
+	SYSCORE_Window_Xcb_SizeHintsFlagPMaxSize      = bindings.XCB_SIZE_HINTS_FLAG_PMAX_SIZE
+	SYSCORE_Window_Xcb_SizeHintsPropertyWordCount = bindings.XcbSizeHintsPropertyWordCount
 )
 
 type (
@@ -81,6 +86,8 @@ type (
 	SYSCORE_Window_Xcb_PFN_destroy_window = bindings.PFN_xcb_destroy_window
 	// SYSCORE_Window_Xcb_PFN_disconnect is the C type for xcb_disconnect.
 	SYSCORE_Window_Xcb_PFN_disconnect = bindings.PFN_xcb_disconnect
+	// SYSCORE_Window_Xcb_SizeHints is the XSizeHints layout for WM_NORMAL_HINTS.
+	SYSCORE_Window_Xcb_SizeHints = bindings.XcbSizeHints
 )
 
 /*

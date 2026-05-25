@@ -28,6 +28,7 @@ const (
 	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceConfigureEvent = bindings.XDG_SURFACE_CONFIGURE_EVENT_OPCODE
 	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetTitle      = bindings.XDG_TOPLEVEL_SET_TITLE_OPCODE
 	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetMinSize    = bindings.XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetMaxSize    = bindings.XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE
 )
 
 type (
