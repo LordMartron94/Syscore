@@ -160,3 +160,37 @@ Maps to wl_display_dispatch_pending. Call from a frame or idle loop to deliver l
 0 on success, negative on error.
 */
 type PFN_wl_display_dispatch_pending func(display WlDisplay) int32
+
+/*
+PFN_wl_display_get_fd returns the Wayland display connection file descriptor.
+
+[Context]
+Maps to wl_display_get_fd. Poll this fd before wl_display_read_events.
+*/
+type PFN_wl_display_get_fd func(display WlDisplay) int32
+
+/*
+PFN_wl_display_prepare_read reserves read access on the display fd for the calling thread.
+
+[Context]
+Maps to wl_display_prepare_read. Returns non-zero when events are already queued; dispatch them
+with wl_display_dispatch_pending and retry.
+*/
+type PFN_wl_display_prepare_read func(display WlDisplay) int32
+
+/*
+PFN_wl_display_read_events reads events from the display fd into the event queue.
+
+[Context]
+Maps to wl_display_read_events. Call only after a successful wl_display_prepare_read and when
+poll indicates the fd is readable.
+*/
+type PFN_wl_display_read_events func(display WlDisplay) int32
+
+/*
+PFN_wl_display_cancel_read cancels a prepared read when the fd is not readable.
+
+[Context]
+Maps to wl_display_cancel_read. Pair with wl_display_prepare_read when skipping read_events.
+*/
+type PFN_wl_display_cancel_read func(display WlDisplay) int32

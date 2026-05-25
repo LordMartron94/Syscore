@@ -96,8 +96,16 @@ type (
 	SYSCORE_Window_Xcb_PFN_disconnect = bindings.PFN_xcb_disconnect
 	// SYSCORE_Window_Xcb_PFN_poll_for_event is the C type for xcb_poll_for_event.
 	SYSCORE_Window_Xcb_PFN_poll_for_event = bindings.PFN_xcb_poll_for_event
+	// SYSCORE_Window_Xcb_PFN_get_file_descriptor is the C type for xcb_get_file_descriptor.
+	SYSCORE_Window_Xcb_PFN_get_file_descriptor = bindings.PFN_xcb_get_file_descriptor
+	// SYSCORE_Window_Xcb_PFN_wait_for_event is the C type for xcb_wait_for_event.
+	SYSCORE_Window_Xcb_PFN_wait_for_event = bindings.PFN_xcb_wait_for_event
 	// SYSCORE_Window_Xcb_SizeHints is the xcb_size_hints_t layout for WM_NORMAL_HINTS.
 	SYSCORE_Window_Xcb_SizeHints = bindings.XcbSizeHints
+	// SYSCORE_Window_Xcb_ClientMessageEvent is the xcb_client_message_event_t wire layout.
+	SYSCORE_Window_Xcb_ClientMessageEvent = bindings.XcbClientMessageEvent
+	// SYSCORE_Window_Xcb_DestroyNotifyEvent is the xcb_destroy_notify_event_t wire layout.
+	SYSCORE_Window_Xcb_DestroyNotifyEvent = bindings.XcbDestroyNotifyEvent
 )
 
 /*

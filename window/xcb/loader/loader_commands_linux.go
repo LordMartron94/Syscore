@@ -31,6 +31,8 @@ func xcbCommandMappingsAll(commands *XcbCommands) []loadutil.CommandMapping {
 		{Target: &commands.DestroyWindow, Name: "xcb_destroy_window"},
 		{Target: &commands.Disconnect, Name: "xcb_disconnect"},
 		{Target: &commands.PollForEvent, Name: "xcb_poll_for_event"},
+		{Target: &commands.GetFileDescriptor, Name: "xcb_get_file_descriptor"},
+		{Target: &commands.WaitForEvent, Name: "xcb_wait_for_event"},
 	}
 }
 

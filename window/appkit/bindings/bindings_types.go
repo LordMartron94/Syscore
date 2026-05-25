@@ -72,3 +72,27 @@ args - Method arguments per ABI.
 Return value as ObjCObject (0 indicates failure for init methods).
 */
 type PFN_objc_msgSend func(receiver ObjCObject, selector ObjCSel, args ...any) ObjCObject
+
+/*
+PFN_objc_allocateClassPair creates a new class pair for a dynamic subclass.
+
+[Context]
+Maps to objc_allocateClassPair. Pass NSObject as the superclass for a window delegate.
+*/
+type PFN_objc_allocateClassPair func(superClass ObjCClass, name *byte, extraBytes uintptr) ObjCClass
+
+/*
+PFN_objc_registerClassPair registers a class pair created with objc_allocateClassPair.
+
+[Context]
+Maps to objc_registerClassPair. Call after class_addMethod before allocating instances.
+*/
+type PFN_objc_registerClassPair func(cls ObjCClass)
+
+/*
+PFN_class_addMethod adds a method implementation to a class.
+
+[Context]
+Maps to class_addMethod. types must be a NUL-terminated Objective-C type encoding string.
+*/
+type PFN_class_addMethod func(cls ObjCClass, name ObjCSel, imp uintptr, types *byte) uint8

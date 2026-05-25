@@ -39,6 +39,9 @@ const (
 	SYSCORE_Window_Win32_ColorWindow                = bindings.COLOR_WINDOW
 	SYSCORE_Window_Win32_CursorArrow                = bindings.IDC_ARROW
 	SYSCORE_Window_Win32_ShowWindow                 = bindings.SW_SHOW
+	SYSCORE_Window_Win32_MessageClose               = bindings.WM_CLOSE
+	SYSCORE_Window_Win32_MessageDestroy             = bindings.WM_DESTROY
+	SYSCORE_Window_Win32_PeekMessageRemove          = bindings.PM_REMOVE
 )
 
 type (
@@ -66,6 +69,12 @@ type (
 	SYSCORE_Window_Win32_PFN_LoadCursorW = bindings.PFN_LoadCursorW
 	// SYSCORE_Window_Win32_PFN_DestroyWindow is the C type for DestroyWindow.
 	SYSCORE_Window_Win32_PFN_DestroyWindow = bindings.PFN_DestroyWindow
+	// SYSCORE_Window_Win32_PFN_PeekMessageW is the C type for PeekMessageW.
+	SYSCORE_Window_Win32_PFN_PeekMessageW = bindings.PFN_PeekMessageW
+	// SYSCORE_Window_Win32_PFN_DispatchMessageW is the C type for DispatchMessageW.
+	SYSCORE_Window_Win32_PFN_DispatchMessageW = bindings.PFN_DispatchMessageW
+	// SYSCORE_Window_Win32_MSG is the Win32 MSG structure.
+	SYSCORE_Window_Win32_MSG = bindings.MSG
 )
 
 /*

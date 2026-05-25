@@ -257,6 +257,48 @@ Maps to xcb_poll_for_event. Free the returned pointer with libc free when done.
 type PFN_xcb_poll_for_event func(c XcbConnectionT) uintptr
 
 /*
+PFN_xcb_get_file_descriptor returns the X connection socket file descriptor.
+
+[Context]
+Maps to xcb_get_file_descriptor. Poll this fd before xcb_wait_for_event when the event queue is empty.
+*/
+type PFN_xcb_get_file_descriptor func(c XcbConnectionT) int32
+
+/*
+PFN_xcb_wait_for_event blocks until an event is available, reading from the connection fd when needed.
+
+[Context]
+Maps to xcb_wait_for_event. Free the returned pointer with libc free when done.
+*/
+type PFN_xcb_wait_for_event func(c XcbConnectionT) uintptr
+
+/*
+XcbClientMessageEvent is the xcb_client_message_event_t wire layout (32 bytes).
+
+[Context]
+Use for WM_PROTOCOLS / WM_DELETE_WINDOW handling. Data[0] is data32[0] at byte offset 12.
+*/
+type XcbClientMessageEvent struct {
+	ResponseType uint8
+	Format       uint8
+	Sequence     uint16
+	Window       XcbWindowT
+	Type         XcbAtomT
+	Data         [5]uint32
+}
+
+/*
+XcbDestroyNotifyEvent is the xcb_destroy_notify_event_t wire layout (12 bytes).
+*/
+type XcbDestroyNotifyEvent struct {
+	ResponseType uint8
+	Pad0         uint8
+	Sequence     uint16
+	Event        XcbWindowT
+	Window       XcbWindowT
+}
+
+/*
 XcbSizeHints is the xcb_size_hints_t layout for WM_NORMAL_HINTS (ICCCM).
 
 [Context]

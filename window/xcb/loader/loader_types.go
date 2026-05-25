@@ -66,4 +66,12 @@ type XcbCommands struct {
 		PollForEvent is xcb_poll_for_event. Returns the next queued event or nil.
 	*/
 	PollForEvent bindings.PFN_xcb_poll_for_event
+	/*
+		GetFileDescriptor is xcb_get_file_descriptor. Returns the X connection socket fd.
+	*/
+	GetFileDescriptor bindings.PFN_xcb_get_file_descriptor
+	/*
+		WaitForEvent is xcb_wait_for_event. Blocks until an event is available and reads from the fd.
+	*/
+	WaitForEvent bindings.PFN_xcb_wait_for_event
 }

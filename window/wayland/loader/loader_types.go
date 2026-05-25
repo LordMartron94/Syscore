@@ -35,6 +35,22 @@ type WaylandCommands struct {
 	*/
 	DisplayDispatchPending bindings.PFN_wl_display_dispatch_pending
 	/*
+		DisplayGetFd is wl_display_get_fd. Returns the compositor connection socket fd.
+	*/
+	DisplayGetFd bindings.PFN_wl_display_get_fd
+	/*
+		DisplayPrepareRead is wl_display_prepare_read. Reserves read access on the display fd.
+	*/
+	DisplayPrepareRead bindings.PFN_wl_display_prepare_read
+	/*
+		DisplayReadEvents is wl_display_read_events. Reads events from the fd into the queue.
+	*/
+	DisplayReadEvents bindings.PFN_wl_display_read_events
+	/*
+		DisplayCancelRead is wl_display_cancel_read. Cancels a prepared read when the fd is not readable.
+	*/
+	DisplayCancelRead bindings.PFN_wl_display_cancel_read
+	/*
 		ProxyMarshal is wl_proxy_marshal. Sends requests on existing proxies (xdg title, ack_configure, etc.).
 	*/
 	ProxyMarshal bindings.PFN_wl_proxy_marshal

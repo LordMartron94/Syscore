@@ -32,6 +32,13 @@ const (
 const (
 	// WM_DESTROY is sent when a window is destroyed.
 	WM_DESTROY uint32 = 0x0002
+	// WM_CLOSE is sent when the user clicks the close button.
+	WM_CLOSE uint32 = 0x0010
+)
+
+const (
+	// PM_REMOVE removes the message from the queue after PeekMessageW returns.
+	PM_REMOVE uint32 = 0x0001
 )
 
 /*

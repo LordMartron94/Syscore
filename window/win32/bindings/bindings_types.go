@@ -156,9 +156,45 @@ Maps to LoadCursorW. Pass hInstance 0 and lpCursorName IDC_ARROW for the default
 type PFN_LoadCursorW func(hInstance HINSTANCE, lpCursorName uintptr) HCURSOR
 
 /*
+MSG is the Win32 MSG structure for PeekMessageW and DispatchMessageW.
+*/
+type MSG struct {
+	HWnd    HWND
+	Message uint32
+	WParam  uintptr
+	LParam  uintptr
+	Time    uint32
+	Pt      POINT
+}
+
+/*
+POINT is the Win32 POINT structure embedded in MSG.
+*/
+type POINT struct {
+	X int32
+	Y int32
+}
+
+/*
 PFN_DestroyWindow destroys a Win32 window.
 
 [Context]
 Maps to DestroyWindow. Call before process exit to remove the HWND from the desktop.
 */
 type PFN_DestroyWindow func(hWnd HWND) int32
+
+/*
+PFN_PeekMessageW checks the thread message queue for a message without blocking when no message is available.
+
+[Context]
+Maps to PeekMessageW. Use PM_REMOVE to dequeue messages for DispatchMessageW.
+*/
+type PFN_PeekMessageW func(msg *MSG, hWnd HWND, wMsgFilterMin uint32, wMsgFilterMax uint32, wRemoveMsg uint32) int32
+
+/*
+PFN_DispatchMessageW dispatches a message to the window procedure for the window in msg.HWnd.
+
+[Context]
+Maps to DispatchMessageW. Call after PeekMessageW with PM_REMOVE.
+*/
+type PFN_DispatchMessageW func(msg *MSG) uintptr

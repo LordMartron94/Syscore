@@ -22,4 +22,16 @@ type AppkitCommands struct {
 		ObjcMsgSend is objc_msgSend. Dispatches Objective-C messages (alloc, init, makeKeyAndOrderFront:, ...).
 	*/
 	ObjcMsgSend bindings.PFN_objc_msgSend
+	/*
+		ObjcAllocateClassPair is objc_allocateClassPair. Creates a dynamic Objective-C subclass.
+	*/
+	ObjcAllocateClassPair bindings.PFN_objc_allocateClassPair
+	/*
+		ObjcRegisterClassPair is objc_registerClassPair. Registers a class pair after adding methods.
+	*/
+	ObjcRegisterClassPair bindings.PFN_objc_registerClassPair
+	/*
+		ClassAddMethod is class_addMethod. Adds an instance method to a dynamic class.
+	*/
+	ClassAddMethod bindings.PFN_class_addMethod
 }

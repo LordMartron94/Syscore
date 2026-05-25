@@ -51,7 +51,7 @@ const (
 	// XcbClientMessageEventWindowOffset is the byte offset of window in xcb_client_message_event_t.
 	XcbClientMessageEventWindowOffset = 4
 	// XcbClientMessageEventData32Offset is the byte offset of data32[0] in xcb_client_message_event_t.
-	XcbClientMessageEventData32Offset = 24
+	XcbClientMessageEventData32Offset = 12
 	// XcbDestroyNotifyEventWindowOffset is the byte offset of window in xcb_destroy_notify_event_t.
 	XcbDestroyNotifyEventWindowOffset = 8
 )

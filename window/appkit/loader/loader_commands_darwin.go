@@ -17,6 +17,9 @@ func appkitCommandMappingsAll(commands *AppkitCommands) []loadutil.CommandMappin
 		{Target: &commands.ObjcGetClass, Name: "objc_getClass"},
 		{Target: &commands.SelRegisterName, Name: "sel_registerName"},
 		{Target: &commands.ObjcMsgSend, Name: "objc_msgSend"},
+		{Target: &commands.ObjcAllocateClassPair, Name: "objc_allocateClassPair"},
+		{Target: &commands.ObjcRegisterClassPair, Name: "objc_registerClassPair"},
+		{Target: &commands.ClassAddMethod, Name: "class_addMethod"},
 	}
 }
 

@@ -42,4 +42,12 @@ type Win32Commands struct {
 		DestroyWindow is DestroyWindow (user32). Destroys an HWND created with CreateWindowExW.
 	*/
 	DestroyWindow bindings.PFN_DestroyWindow
+	/*
+		PeekMessageW is PeekMessageW (user32). Non-blocking message queue peek.
+	*/
+	PeekMessageW bindings.PFN_PeekMessageW
+	/*
+		DispatchMessageW is DispatchMessageW (user32). Dispatches a message to the window procedure.
+	*/
+	DispatchMessageW bindings.PFN_DispatchMessageW
 }

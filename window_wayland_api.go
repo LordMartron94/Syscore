@@ -64,6 +64,14 @@ type (
 	SYSCORE_Window_Wayland_PFN_display_roundtrip = bindings.PFN_wl_display_roundtrip
 	// SYSCORE_Window_Wayland_PFN_display_dispatch_pending is the C type for wl_display_dispatch_pending.
 	SYSCORE_Window_Wayland_PFN_display_dispatch_pending = bindings.PFN_wl_display_dispatch_pending
+	// SYSCORE_Window_Wayland_PFN_display_get_fd is the C type for wl_display_get_fd.
+	SYSCORE_Window_Wayland_PFN_display_get_fd = bindings.PFN_wl_display_get_fd
+	// SYSCORE_Window_Wayland_PFN_display_prepare_read is the C type for wl_display_prepare_read.
+	SYSCORE_Window_Wayland_PFN_display_prepare_read = bindings.PFN_wl_display_prepare_read
+	// SYSCORE_Window_Wayland_PFN_display_read_events is the C type for wl_display_read_events.
+	SYSCORE_Window_Wayland_PFN_display_read_events = bindings.PFN_wl_display_read_events
+	// SYSCORE_Window_Wayland_PFN_display_cancel_read is the C type for wl_display_cancel_read.
+	SYSCORE_Window_Wayland_PFN_display_cancel_read = bindings.PFN_wl_display_cancel_read
 	// SYSCORE_Window_Wayland_PFN_proxy_marshal is the C type for wl_proxy_marshal.
 	SYSCORE_Window_Wayland_PFN_proxy_marshal = bindings.PFN_wl_proxy_marshal
 	// SYSCORE_Window_Wayland_PFN_proxy_destroy is the C type for wl_proxy_destroy.
