@@ -18,17 +18,18 @@ Linux only.
 type SYSCORE_Window_Wayland_Xdg_Module = loader.XdgModule
 
 const (
-	SYSCORE_Window_Wayland_Xdg_GlobalNameWmBase            = bindings.XDG_WM_BASE_GLOBAL_NAME
-	SYSCORE_Window_Wayland_Xdg_SymbolWmBaseInterface       = bindings.XDG_WM_BASE_INTERFACE_SYMBOL
-	SYSCORE_Window_Wayland_Xdg_SymbolSurfaceInterface      = bindings.XDG_SURFACE_INTERFACE_SYMBOL
-	SYSCORE_Window_Wayland_Xdg_SymbolToplevelInterface     = bindings.XDG_TOPLEVEL_INTERFACE_SYMBOL
-	SYSCORE_Window_Wayland_Xdg_OpcodeWmBaseGetXdgSurface   = bindings.XDG_WM_BASE_GET_XDG_SURFACE_OPCODE
-	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceGetToplevel    = bindings.XDG_SURFACE_GET_TOPLEVEL_OPCODE
-	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceAckConfigure   = bindings.XDG_SURFACE_ACK_CONFIGURE_OPCODE
-	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceConfigureEvent = bindings.XDG_SURFACE_CONFIGURE_EVENT_OPCODE
-	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetTitle      = bindings.XDG_TOPLEVEL_SET_TITLE_OPCODE
-	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetMinSize    = bindings.XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE
-	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetMaxSize    = bindings.XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE
+	SYSCORE_Window_Wayland_Xdg_GlobalNameWmBase               = bindings.XDG_WM_BASE_GLOBAL_NAME
+	SYSCORE_Window_Wayland_Xdg_SymbolWmBaseInterface          = bindings.XDG_WM_BASE_INTERFACE_SYMBOL
+	SYSCORE_Window_Wayland_Xdg_SymbolSurfaceInterface         = bindings.XDG_SURFACE_INTERFACE_SYMBOL
+	SYSCORE_Window_Wayland_Xdg_SymbolToplevelInterface        = bindings.XDG_TOPLEVEL_INTERFACE_SYMBOL
+	SYSCORE_Window_Wayland_Xdg_OpcodeWmBaseGetXdgSurface      = bindings.XDG_WM_BASE_GET_XDG_SURFACE_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceGetToplevel       = bindings.XDG_SURFACE_GET_TOPLEVEL_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceSetWindowGeometry = bindings.XDG_SURFACE_SET_WINDOW_GEOMETRY_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceAckConfigure      = bindings.XDG_SURFACE_ACK_CONFIGURE_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeSurfaceConfigureEvent    = bindings.XDG_SURFACE_CONFIGURE_EVENT_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetTitle         = bindings.XDG_TOPLEVEL_SET_TITLE_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetMinSize       = bindings.XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE
+	SYSCORE_Window_Wayland_Xdg_OpcodeToplevelSetMaxSize       = bindings.XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE
 )
 
 type (

@@ -42,6 +42,7 @@ const (
 	SYSCORE_Window_Xcb_AtomNameUTF8String         = bindings.XCB_ATOM_UTF8_STRING
 	SYSCORE_Window_Xcb_AtomNameWMNormalHints      = bindings.XCB_ATOM_WM_NORMAL_HINTS
 	SYSCORE_Window_Xcb_AtomNameWMSizeHints        = bindings.XCB_ATOM_WM_SIZE_HINTS
+	SYSCORE_Window_Xcb_SizeHintsFlagPSize         = bindings.XCB_SIZE_HINTS_FLAG_PSIZE
 	SYSCORE_Window_Xcb_SizeHintsFlagPMinSize      = bindings.XCB_SIZE_HINTS_FLAG_PMIN_SIZE
 	SYSCORE_Window_Xcb_SizeHintsFlagPMaxSize      = bindings.XCB_SIZE_HINTS_FLAG_PMAX_SIZE
 	SYSCORE_Window_Xcb_SizeHintsPropertyWordCount = bindings.XcbSizeHintsPropertyWordCount

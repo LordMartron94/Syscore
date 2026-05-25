@@ -16,6 +16,8 @@ const (
 
 	// XDG_SURFACE_GET_TOPLEVEL_OPCODE is xdg_surface.get_toplevel.
 	XDG_SURFACE_GET_TOPLEVEL_OPCODE uint32 = 1
+	// XDG_SURFACE_SET_WINDOW_GEOMETRY_OPCODE is xdg_surface.set_window_geometry.
+	XDG_SURFACE_SET_WINDOW_GEOMETRY_OPCODE uint32 = 3
 	// XDG_SURFACE_ACK_CONFIGURE_OPCODE is xdg_surface.ack_configure.
 	XDG_SURFACE_ACK_CONFIGURE_OPCODE uint32 = 4
 	// XDG_SURFACE_CONFIGURE_EVENT_OPCODE is the configure event on xdg_surface.
@@ -26,5 +28,5 @@ const (
 	// XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE is xdg_toplevel.set_min_size.
 	XDG_TOPLEVEL_SET_MIN_SIZE_OPCODE uint32 = 8
 	// XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE is xdg_toplevel.set_max_size.
-	XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE uint32 = 9
+	XDG_TOPLEVEL_SET_MAX_SIZE_OPCODE uint32 = 7
 )

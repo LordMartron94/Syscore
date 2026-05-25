@@ -7,6 +7,8 @@ const (
 	WL_REGISTRY_BIND_OPCODE uint32 = 0
 	// WL_COMPOSITOR_CREATE_SURFACE_OPCODE is wl_compositor.create_surface.
 	WL_COMPOSITOR_CREATE_SURFACE_OPCODE uint32 = 0
+	// WL_SURFACE_COMMIT_OPCODE is wl_surface.commit.
+	WL_SURFACE_COMMIT_OPCODE uint32 = 6
 )
 
 const (
