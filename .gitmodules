@@ -1,0 +1,15 @@
+[submodule "wayland-spec"]
+	path = window/internal/spec/vendor/wayland
+	url = https://gitlab.freedesktop.org/wayland/wayland.git
+[submodule "wayland-protocols-spec"]
+	path = window/internal/spec/vendor/wayland-protocols
+	url = https://gitlab.freedesktop.org/wayland/wayland-protocols.git
+[submodule "xcbproto-spec"]
+	path = window/internal/spec/vendor/xcbproto
+	url = https://gitlab.freedesktop.org/xorg/proto/xcbproto.git
+[submodule "win32metadata-spec"]
+	path = window/internal/spec/vendor/win32metadata
+	url = https://github.com/microsoft/win32metadata.git
+[submodule "macos-headers-spec"]
+	path = window/internal/spec/vendor/macos-headers
+	url = https://github.com/dotnet/macios.git

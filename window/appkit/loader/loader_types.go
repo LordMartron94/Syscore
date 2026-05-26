@@ -1,3 +1,5 @@
+//go:build darwin
+
 package loader
 
 import "syscore/window/appkit/bindings"

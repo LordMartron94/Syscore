@@ -1,0 +1,64 @@
+{
+  "submodules": {
+    "wayland": {
+      "path": "vendor/wayland",
+      "url": "https://gitlab.freedesktop.org/wayland/wayland.git",
+      "tag": "1.23.0",
+      "commit": "a156431ea66fe67d69c9fbba8a8ad34dabbab81c"
+    },
+    "wayland-protocols": {
+      "path": "vendor/wayland-protocols",
+      "url": "https://gitlab.freedesktop.org/wayland/wayland-protocols.git",
+      "tag": "1.38",
+      "commit": "9ac1a0977eea1b2f525e375089131f7d696a74ee"
+    },
+    "xcbproto": {
+      "path": "vendor/xcbproto",
+      "url": "https://gitlab.freedesktop.org/xorg/proto/xcbproto.git",
+      "tag": "xcb-proto-1.17.0",
+      "commit": "77d7fc04da729ddc5ed4aacf30253726fac24dca"
+    },
+    "win32metadata": {
+      "path": "vendor/win32metadata",
+      "url": "https://github.com/microsoft/win32metadata.git",
+      "tag": "",
+      "commit": "",
+      "note": "Source repo for regenerating winmd; pinned binary is win32/Windows.Win32.winmd"
+    },
+    "macos-headers": {
+      "path": "vendor/macos-headers",
+      "url": "https://github.com/dotnet/macios.git",
+      "tag": "",
+      "commit": "",
+      "note": "dotnet/macios generated AppKit bindings (sharpie); not hand-written headers"
+    }
+  },
+  "inputs": {
+    "wayland": {
+      "submodule": "wayland",
+      "relativePath": "protocol/wayland.xml",
+      "sha256": "0c371e9c31f8178008a7ddecf431cbe12ec4b29ef7714803ecd3e20af925e7ed"
+    },
+    "xdg-shell": {
+      "submodule": "wayland-protocols",
+      "relativePath": "stable/xdg-shell/xdg-shell.xml",
+      "sha256": "f241ab95c262eb45af6507bf0178b8dcd88d5e1cc8fc6ec4a9944d9e5b15ac98"
+    },
+    "xproto": {
+      "submodule": "xcbproto",
+      "relativePath": "src/xproto.xml",
+      "sha256": "bb8c060a8ea009a5d08a57c0c6daa1d3dd7e9d743d46d055109505c344a1f4c9"
+    },
+    "win32-winmd": {
+      "relativePath": "win32/Windows.Win32.winmd",
+      "sha256": "ab164668e6a0ce9c3254226b9ea9605b06c41b3da3e93d104ebdaa622517a534",
+      "nugetPackage": "Microsoft.Windows.SDK.Win32Metadata",
+      "nugetVersion": "60.0.34-preview"
+    },
+    "macos-headers": {
+      "submodule": "macos-headers",
+      "relativePath": "src/AppKit/Enums.cs",
+      "note": "macios generated enums; selectors from src/appkit.cs Export attributes"
+    }
+  }
+}
