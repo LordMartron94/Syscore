@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"codegen"
 	gocode "codegen/go"
@@ -13,9 +15,12 @@ const (
 	xcbTypesGenFile     = "bindings_types_gen.go"
 )
 
-func xcbBindingsGenerate(xprotoXML string, outputDir string) error {
+func xcbBindingsGenerate(xprotoXML string, xcbEventHeader string, outputDir string) error {
 	if _, err := os.Stat(xprotoXML); err != nil {
 		return fmt.Errorf("xproto spec: %w", err)
+	}
+	if _, err := os.Stat(xcbEventHeader); err != nil {
+		return fmt.Errorf("xcb event header: %w", err)
 	}
 
 	ir, err := xprotoIRBuild(xprotoXML)
@@ -23,7 +28,12 @@ func xcbBindingsGenerate(xprotoXML string, outputDir string) error {
 		return fmt.Errorf("xproto ir: %w", err)
 	}
 
-	if err := xcbConstantsGenerate(outputDir); err != nil {
+	eventResponseTypeMask, err := cHeaderDefineValueGet(xcbEventHeader, "XCB_EVENT_RESPONSE_TYPE_MASK")
+	if err != nil {
+		return err
+	}
+
+	if err := xcbConstantsGenerate(outputDir, ir, eventResponseTypeMask); err != nil {
 		return err
 	}
 	if err := xcbTypesGenerate(outputDir, ir); err != nil {
@@ -32,7 +42,7 @@ func xcbBindingsGenerate(xprotoXML string, outputDir string) error {
 	return bindingFilesFormat(outputDir, xcbConstantsGenFile, xcbTypesGenFile)
 }
 
-func xcbConstantsGenerate(outputDir string) error {
+func xcbConstantsGenerate(outputDir string, ir *xprotoIR, eventResponseTypeMaskValueExpr string) error {
 	elements := bindingFilePreamble("bindings", "linux")
 
 	stringConsts := []struct {
@@ -53,11 +63,50 @@ func xcbConstantsGenerate(outputDir string) error {
 		specs = append(specs, gocode.ConstSpecNew(item.name, nil, fmt.Sprintf("%q", item.value), item.doc))
 	}
 
+	windowClassInputOutput, err := xcbEnumValueRequireInt(ir, "WindowClass", "InputOutput")
+	if err != nil {
+		return err
+	}
+	propModeReplace, err := xcbEnumValueRequireInt(ir, "PropMode", "Replace")
+	if err != nil {
+		return err
+	}
+	eventClientMessage, err := xcbEventNumberRequire(ir, "ClientMessage")
+	if err != nil {
+		return err
+	}
+	eventDestroyNotify, err := xcbEventNumberRequire(ir, "DestroyNotify")
+	if err != nil {
+		return err
+	}
+
 	numericConsts := []gocode.ConstSpec{
-		gocode.ConstSpecNew("XCB_WINDOW_CLASS_INPUT_OUTPUT", gocode.TypeExprNamedPtr("uint16"), "1", "XCB_WINDOW_CLASS_INPUT_OUTPUT is the InputOutput window class."),
-		gocode.ConstSpecNew("XCB_PROP_MODE_REPLACE", gocode.TypeExprNamedPtr("uint8"), "0", "XCB_PROP_MODE_REPLACE replaces the previous property value."),
-		gocode.ConstSpecNew("XCB_EVENT_CLIENT_MESSAGE", gocode.TypeExprNamedPtr("uint8"), "33", "XCB_EVENT_CLIENT_MESSAGE is the response type for ClientMessage events."),
-		gocode.ConstSpecNew("XCB_EVENT_DESTROY_NOTIFY", gocode.TypeExprNamedPtr("uint8"), "17", "XCB_EVENT_DESTROY_NOTIFY is the response type for DestroyNotify events."),
+		gocode.ConstSpecNew(
+			"XCB_WINDOW_CLASS_INPUT_OUTPUT",
+			gocode.TypeExprNamedPtr("uint16"),
+			fmt.Sprintf("%d", windowClassInputOutput),
+			"XCB_WINDOW_CLASS_INPUT_OUTPUT is the InputOutput window class.",
+		),
+		gocode.ConstSpecNew(
+			"XCB_PROP_MODE_REPLACE",
+			gocode.TypeExprNamedPtr("uint8"),
+			fmt.Sprintf("%d", propModeReplace),
+			"XCB_PROP_MODE_REPLACE replaces the previous property value.",
+		),
+		gocode.ConstSpecNew(
+			"XCB_EVENT_CLIENT_MESSAGE",
+			gocode.TypeExprNamedPtr("uint8"),
+			fmt.Sprintf("%d", eventClientMessage),
+			"XCB_EVENT_CLIENT_MESSAGE is the response type for ClientMessage events.",
+		),
+		gocode.ConstSpecNew(
+			"XCB_EVENT_DESTROY_NOTIFY",
+			gocode.TypeExprNamedPtr("uint8"),
+			fmt.Sprintf("%d", eventDestroyNotify),
+			"XCB_EVENT_DESTROY_NOTIFY is the response type for DestroyNotify events.",
+		),
+		gocode.ConstSpecNew("XCB_RESPONSE_TYPE_EVENT_CODE_MASK", gocode.TypeExprNamedPtr("uint8"), eventResponseTypeMaskValueExpr, "XCB_RESPONSE_TYPE_EVENT_CODE_MASK masks the core event code from response_type (X11 core protocol send_event flag is bit 7)."),
+		gocode.ConstSpecNew("XCB_RESPONSE_TYPE_SENT_EVENT_FLAG", gocode.TypeExprNamedPtr("uint8"), "^XCB_RESPONSE_TYPE_EVENT_CODE_MASK", "XCB_RESPONSE_TYPE_SENT_EVENT_FLAG is set in response_type when the X server marks send_event=true (bit 7)."),
 		gocode.ConstSpecNew("XcbClientMessageEventWindowOffset", nil, "4", "XcbClientMessageEventWindowOffset is the byte offset of window in xcb_client_message_event_t."),
 		gocode.ConstSpecNew("XcbClientMessageEventData32Offset", nil, "12", "XcbClientMessageEventData32Offset is the byte offset of data32[0] in xcb_client_message_event_t."),
 		gocode.ConstSpecNew("XcbDestroyNotifyEventWindowOffset", nil, "8", "XcbDestroyNotifyEventWindowOffset is the byte offset of window in xcb_destroy_notify_event_t."),
@@ -71,6 +120,48 @@ func xcbConstantsGenerate(outputDir string) error {
 	elements = append(elements, gocode.FileElementFrom(gocode.DeclConstGroup(specs, "", true)))
 	bindingBlankLine(&elements)
 	return writeBindingFile(outputDir, xcbConstantsGenFile, elements)
+}
+
+func xcbEnumValueRequireInt(ir *xprotoIR, enumName string, itemName string) (int64, error) {
+	value, ok := xprotoEnumValueGet(ir, enumName, itemName)
+	if !ok {
+		return 0, fmt.Errorf("xproto: enum %s.%s not found in spec", enumName, itemName)
+	}
+	return value, nil
+}
+
+func xcbEventNumberRequire(ir *xprotoIR, eventName string) (uint32, error) {
+	value, ok := xprotoEventNumberGet(ir, eventName)
+	if !ok {
+		return 0, fmt.Errorf("xproto: event %s number not found in spec", eventName)
+	}
+	return value, nil
+}
+
+func cHeaderDefineValueGet(headerPath string, defineName string) (string, error) {
+	f, err := os.Open(headerPath)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	prefix := "#define " + defineName
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if !strings.HasPrefix(line, prefix) {
+			continue
+		}
+		rest := strings.TrimSpace(strings.TrimPrefix(line, prefix))
+		if rest == "" {
+			return "", fmt.Errorf("header %s: %s has empty define value", headerPath, defineName)
+		}
+		return rest, nil
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+	return "", fmt.Errorf("header %s: missing #define %s", headerPath, defineName)
 }
 
 func xcbTypesGenerate(outputDir string, ir *xprotoIR) error {

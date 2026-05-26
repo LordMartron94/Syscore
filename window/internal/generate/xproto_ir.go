@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	specxml "foundation/spec/xml"
@@ -23,6 +24,8 @@ type xprotoRequestIR struct {
 
 type xprotoIR struct {
 	Requests map[string]xprotoRequestIR
+	Events   map[string]uint32
+	Enums    map[string]map[string]int64
 }
 
 func xprotoIRBuild(xmlPath string) (*xprotoIR, error) {
@@ -38,23 +41,88 @@ func xprotoIRBuild(xmlPath string) (*xprotoIR, error) {
 		return nil, fmt.Errorf("xproto: empty document")
 	}
 
-	ir := &xprotoIR{Requests: make(map[string]xprotoRequestIR)}
+	ir := &xprotoIR{
+		Requests: make(map[string]xprotoRequestIR),
+		Events:   make(map[string]uint32),
+		Enums:    make(map[string]map[string]int64),
+	}
 	root.Walk(func(node *specxml.Node) {
-		if node == nil || node.Name != "request" {
+		if node == nil {
 			return
 		}
-		name := node.Attr("name")
-		if name == "" {
-			return
+		switch node.Name {
+		case "request":
+			name := node.Attr("name")
+			if name == "" {
+				return
+			}
+			req := xprotoRequestIR{
+				Name:     name,
+				Fields:   xprotoRequestFieldsParse(node),
+				HasReply: xprotoRequestHasReply(node),
+			}
+			ir.Requests[name] = req
+		case "event":
+			name := node.Attr("name")
+			numberString := node.Attr("number")
+			if name == "" || numberString == "" {
+				return
+			}
+			number, err := strconv.ParseUint(numberString, 10, 32)
+			if err != nil {
+				return
+			}
+			ir.Events[name] = uint32(number)
+		case "enum":
+			enumName := node.Attr("name")
+			if enumName == "" {
+				return
+			}
+			items := make(map[string]int64)
+			for _, item := range node.NodesNamed("item") {
+				if item == nil {
+					continue
+				}
+				itemName := item.Attr("name")
+				if itemName == "" {
+					continue
+				}
+				valueNode := item.Child("value")
+				if valueNode == nil || strings.TrimSpace(valueNode.Text) == "" {
+					continue
+				}
+				value, err := strconv.ParseInt(strings.TrimSpace(valueNode.Text), 10, 64)
+				if err != nil {
+					continue
+				}
+				items[itemName] = value
+			}
+			if len(items) > 0 {
+				ir.Enums[enumName] = items
+			}
 		}
-		req := xprotoRequestIR{
-			Name:     name,
-			Fields:   xprotoRequestFieldsParse(node),
-			HasReply: xprotoRequestHasReply(node),
-		}
-		ir.Requests[name] = req
 	})
 	return ir, nil
+}
+
+func xprotoEnumValueGet(ir *xprotoIR, enumName string, itemName string) (int64, bool) {
+	if ir == nil {
+		return 0, false
+	}
+	enum, ok := ir.Enums[enumName]
+	if !ok {
+		return 0, false
+	}
+	value, ok := enum[itemName]
+	return value, ok
+}
+
+func xprotoEventNumberGet(ir *xprotoIR, eventName string) (uint32, bool) {
+	if ir == nil {
+		return 0, false
+	}
+	value, ok := ir.Events[eventName]
+	return value, ok
 }
 
 func xprotoRequestHasReply(node *specxml.Node) bool {
@@ -97,9 +165,7 @@ func xcbRequestNameFromSymbol(symbol string) (string, bool) {
 		return "", false
 	}
 	rest := strings.TrimPrefix(symbol, "xcb_")
-	if strings.HasSuffix(rest, "_reply") {
-		rest = strings.TrimSuffix(rest, "_reply")
-	}
+	rest = strings.TrimSuffix(rest, "_reply")
 	if rest == "" {
 		return "", false
 	}

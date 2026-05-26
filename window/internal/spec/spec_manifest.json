@@ -49,6 +49,10 @@
       "relativePath": "src/xproto.xml",
       "sha256": "bb8c060a8ea009a5d08a57c0c6daa1d3dd7e9d743d46d055109505c344a1f4c9"
     },
+    "xcb-event-header": {
+      "relativePath": "vendor/libxcb-util/src/xcb_event.h",
+      "sha256": "a29545f9f254904e4623b622d08f10a2950940344694e7e9fdbd85b5bed88503"
+    },
     "win32-winmd": {
       "relativePath": "win32/Windows.Win32.winmd",
       "sha256": "ab164668e6a0ce9c3254226b9ea9605b06c41b3da3e93d104ebdaa622517a534",

@@ -50,6 +50,8 @@ const (
 	SYSCORE_Window_Xcb_SizeHintsPropertyWordCount     = bindings.XcbSizeHintsPropertyWordCount
 	SYSCORE_Window_Xcb_EventClientMessage             = bindings.XCB_EVENT_CLIENT_MESSAGE
 	SYSCORE_Window_Xcb_EventDestroyNotify             = bindings.XCB_EVENT_DESTROY_NOTIFY
+	SYSCORE_Window_Xcb_ResponseTypeEventCodeMask      = bindings.XCB_RESPONSE_TYPE_EVENT_CODE_MASK
+	SYSCORE_Window_Xcb_ResponseTypeSentEventFlag      = bindings.XCB_RESPONSE_TYPE_SENT_EVENT_FLAG
 	SYSCORE_Window_Xcb_ClientMessageEventWindowOffset = bindings.XcbClientMessageEventWindowOffset
 	SYSCORE_Window_Xcb_ClientMessageEventData32Offset = bindings.XcbClientMessageEventData32Offset
 	SYSCORE_Window_Xcb_DestroyNotifyEventWindowOffset = bindings.XcbDestroyNotifyEventWindowOffset

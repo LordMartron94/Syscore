@@ -80,6 +80,10 @@ func windowGenerateLinux(specRoot string, manifest windowSpecManifest, waylandBi
 	if err != nil {
 		return err
 	}
+	xcbEventHeader, err := windowSpecInputPathResolve(specRoot, manifest, "xcb-event-header")
+	if err != nil {
+		return err
+	}
 
 	waylandSubmodule, ok := manifest.Submodules["wayland"]
 	if !ok {
@@ -126,7 +130,7 @@ func windowGenerateLinux(specRoot string, manifest windowSpecManifest, waylandBi
 	}
 
 	if xcbBindings != "" {
-		if err := xcbBindingsGenerate(xprotoXML, xcbBindings); err != nil {
+		if err := xcbBindingsGenerate(xprotoXML, xcbEventHeader, xcbBindings); err != nil {
 			return err
 		}
 		fmt.Printf("Wrote XCB bindings to %s\n", xcbBindings)
