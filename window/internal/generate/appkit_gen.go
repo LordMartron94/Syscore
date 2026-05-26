@@ -10,8 +10,8 @@ const (
 	appkitTypesGenFile     = "bindings_types_gen.go"
 )
 
-func appkitBindingsGenerate(enumsPath string, outputDir string) error {
-	ir, err := maciosBindingsIRBuild(enumsPath)
+func appkitBindingsGenerate(enumsPath string, appkitSourcePath string, foundationEnumsPath string, outputDir string) error {
+	ir, err := maciosBindingsIRBuild(enumsPath, appkitSourcePath, foundationEnumsPath)
 	if err != nil {
 		return err
 	}

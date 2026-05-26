@@ -21,7 +21,7 @@ func waylandBindingsGenerate(waylandXML string, clientCoreHeader string, outputD
 	if err := waylandConstantsGenerate(interfaces, outputDir, extraConstants); err != nil {
 		return err
 	}
-	if err := waylandTypesGenerate(interfaces, outputDir, listenerEvents, clientCoreHeader, emitClientPFNs); err != nil {
+	if err := waylandTypesGenerate(interfaces, outputDir, clientCoreHeader, emitClientPFNs); err != nil {
 		return err
 	}
 	return bindingFilesFormat(outputDir, waylandConstantsGenFile, waylandTypesGenFile)
@@ -41,11 +41,18 @@ func waylandConstantsGenerate(interfaces map[string]waylandInterfaceIR, outputDi
 	for _, name := range names {
 		iface := interfaces[name]
 		symbolConst := waylandGoSymbolConst(name)
+		globalNameConst := waylandGoConstPrefix(name) + "_GLOBAL_NAME"
 		constSpecs = append(constSpecs, gocode.ConstSpecNew(
 			symbolConst,
 			nil,
 			fmt.Sprintf("%q", name+"_interface"),
 			fmt.Sprintf("%s is the exported wl_interface symbol for %s.", symbolConst, name),
+		))
+		constSpecs = append(constSpecs, gocode.ConstSpecNew(
+			globalNameConst,
+			nil,
+			fmt.Sprintf("%q", name),
+			fmt.Sprintf("%s is the registry global name for %s.", globalNameConst, name),
 		))
 		for _, request := range iface.Requests {
 			key := waylandGoOpcodeConst(name, "request", request.Name)
@@ -72,7 +79,7 @@ func waylandConstantsGenerate(interfaces map[string]waylandInterfaceIR, outputDi
 	return writeBindingFile(outputDir, waylandConstantsGenFile, elements)
 }
 
-func waylandTypesGenerate(interfaces map[string]waylandInterfaceIR, outputDir string, listenerEvents map[string][]string, clientCoreHeader string, emitClientPFNs bool) error {
+func waylandTypesGenerate(interfaces map[string]waylandInterfaceIR, outputDir string, clientCoreHeader string, emitClientPFNs bool) error {
 	names := make([]string, 0, len(interfaces))
 	for name := range interfaces {
 		names = append(names, name)
@@ -103,7 +110,7 @@ func waylandTypesGenerate(interfaces map[string]waylandInterfaceIR, outputDir st
 		))
 		bindingBlankLine(&elements)
 
-		events := waylandListenerEventsSelect(iface.Events, listenerEvents[name])
+		events := iface.Events
 		if len(events) == 0 {
 			continue
 		}
@@ -139,21 +146,4 @@ func waylandTypesGenerate(interfaces map[string]waylandInterfaceIR, outputDir st
 	}
 
 	return writeBindingFile(outputDir, waylandTypesGenFile, elements)
-}
-
-func waylandListenerEventsSelect(events []waylandMessageIR, whitelist []string) []waylandMessageIR {
-	if len(whitelist) == 0 {
-		return nil
-	}
-	allowed := make(map[string]struct{}, len(whitelist))
-	for _, name := range whitelist {
-		allowed[name] = struct{}{}
-	}
-	selected := make([]waylandMessageIR, 0, len(whitelist))
-	for _, event := range events {
-		if _, ok := allowed[event.Name]; ok {
-			selected = append(selected, event)
-		}
-	}
-	return selected
 }

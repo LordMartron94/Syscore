@@ -3,8 +3,10 @@
 package syscore
 
 import (
+	"fmt"
 	"syscore/window/appkit/bindings"
 	"syscore/window/appkit/loader"
+	"unsafe"
 )
 
 /*
@@ -31,30 +33,29 @@ SYSCORE_Window_Appkit_CommandManifest lists Objective-C runtime entry points for
 type SYSCORE_Window_Appkit_CommandManifest = loader.AppkitCommandManifest
 
 const (
-	SYSCORE_Window_Appkit_WindowStyleTitled             = bindings.NSWindowStyleMaskTitled
-	SYSCORE_Window_Appkit_WindowStyleClosable           = bindings.NSWindowStyleMaskClosable
-	SYSCORE_Window_Appkit_WindowStyleMiniaturizable     = bindings.NSWindowStyleMaskMiniaturizable
-	SYSCORE_Window_Appkit_WindowStyleResizable          = bindings.NSWindowStyleMaskResizable
-	SYSCORE_Window_Appkit_BackingStoreBuffered          = bindings.NSBackingStoreBuffered
-	SYSCORE_Window_Appkit_ClassNSApplication            = bindings.ObjCClassNSApplication
-	SYSCORE_Window_Appkit_ClassNSWindow                 = bindings.ObjCClassNSWindow
-	SYSCORE_Window_Appkit_ClassNSString                 = bindings.ObjCClassNSString
-	SYSCORE_Window_Appkit_SelSharedApplication          = bindings.ObjCSelSharedApplication
-	SYSCORE_Window_Appkit_SelAlloc                      = bindings.ObjCSelAlloc
-	SYSCORE_Window_Appkit_SelInitWindow                 = bindings.ObjCSelInitWithContentRectStyleMaskBackingDefer
-	SYSCORE_Window_Appkit_SelMakeKeyAndOrderFront       = bindings.ObjCSelMakeKeyAndOrderFront
-	SYSCORE_Window_Appkit_SelStringWithUTF8String       = bindings.ObjCSelStringWithUTF8String
-	SYSCORE_Window_Appkit_SelSetTitle                   = bindings.ObjCSelSetTitle
-	SYSCORE_Window_Appkit_SelClose                      = bindings.ObjCSelClose
-	SYSCORE_Window_Appkit_SelInit                       = bindings.ObjCSelInit
-	SYSCORE_Window_Appkit_SelSetDelegate                = bindings.ObjCSelSetDelegate
-	SYSCORE_Window_Appkit_SelWindowShouldClose          = bindings.ObjCSelWindowShouldClose
-	SYSCORE_Window_Appkit_SelNextEventMatchingMask      = bindings.ObjCSelNextEventMatchingMask
-	SYSCORE_Window_Appkit_ClassNSDate                   = bindings.ObjCClassNSDate
-	SYSCORE_Window_Appkit_SelDistantPast                = bindings.ObjCSelDistantPast
-	SYSCORE_Window_Appkit_RunLoopModeDefault            = bindings.NSRunLoopModeDefault
-	SYSCORE_Window_Appkit_EventMaskAny                  = bindings.NSEventMaskAny
-	SYSCORE_Window_Appkit_TypeEncodingWindowShouldClose = bindings.ObjCTypeEncodingWindowShouldClose
+	SYSCORE_Window_Appkit_WindowStyleTitled         = bindings.NSWindowStyleMaskTitled
+	SYSCORE_Window_Appkit_WindowStyleClosable       = bindings.NSWindowStyleMaskClosable
+	SYSCORE_Window_Appkit_WindowStyleMiniaturizable = bindings.NSWindowStyleMaskMiniaturizable
+	SYSCORE_Window_Appkit_WindowStyleResizable      = bindings.NSWindowStyleMaskResizable
+	SYSCORE_Window_Appkit_BackingStoreBuffered      = bindings.NSBackingStoreBuffered
+	SYSCORE_Window_Appkit_ClassNSApplication        = bindings.ObjCClassNSApplication
+	SYSCORE_Window_Appkit_ClassNSWindow             = bindings.ObjCClassNSWindow
+	SYSCORE_Window_Appkit_ClassNSString             = bindings.ObjCClassNSString
+	SYSCORE_Window_Appkit_SelSharedApplication      = bindings.ObjCSelSharedApplication
+	SYSCORE_Window_Appkit_SelAlloc                  = bindings.ObjCSelAlloc
+	SYSCORE_Window_Appkit_SelInitWindow             = bindings.ObjCSelInitWithContentRectStyleMaskBackingDefer
+	SYSCORE_Window_Appkit_SelMakeKeyAndOrderFront   = bindings.ObjCSelMakeKeyAndOrderFront
+	SYSCORE_Window_Appkit_SelStringWithUTF8String   = bindings.ObjCSelStringWithUTF8String
+	SYSCORE_Window_Appkit_SelSetTitle               = bindings.ObjCSelSetTitle
+	SYSCORE_Window_Appkit_SelClose                  = bindings.ObjCSelClose
+	SYSCORE_Window_Appkit_SelInit                   = bindings.ObjCSelInit
+	SYSCORE_Window_Appkit_SelSetDelegate            = bindings.ObjCSelSetDelegate
+	SYSCORE_Window_Appkit_SelWindowShouldClose      = bindings.ObjCSelWindowShouldClose
+	SYSCORE_Window_Appkit_SelNextEventMatchingMask  = bindings.ObjCSelNextEventMatchingMask
+	SYSCORE_Window_Appkit_ClassNSDate               = bindings.ObjCClassNSDate
+	SYSCORE_Window_Appkit_SelDistantPast            = bindings.ObjCSelDistantPast
+	SYSCORE_Window_Appkit_RunLoopModeDefault        = bindings.NSRunLoopModeDefault
+	SYSCORE_Window_Appkit_EventMaskAny              = bindings.NSEventMaskAnyEvent
 )
 
 type (
@@ -112,6 +113,18 @@ SYSCORE_Window_Appkit_ModuleAppkitLibraryName returns the path used to load the 
 */
 func SYSCORE_Window_Appkit_ModuleAppkitLibraryName() string {
 	return loader.AppkitModuleAppkitLibraryName()
+}
+
+/*
+SYSCORE_Window_Appkit_TypeEncodingWindowShouldCloseGet returns the Objective-C type encoding for -windowShouldClose:.
+
+[Context]
+Encoding layout follows Objective-C runtime convention: return type (c), total frame size,
+self (@0), _cmd (:ptr), first argument (@2*ptr). On 64-bit macOS this evaluates to "c24@0:8@16".
+*/
+func SYSCORE_Window_Appkit_TypeEncodingWindowShouldCloseGet() string {
+	ptr := int(unsafe.Sizeof(uintptr(0)))
+	return fmt.Sprintf("c%d@0:%d@%d", ptr*3, ptr, ptr*2)
 }
 
 /*

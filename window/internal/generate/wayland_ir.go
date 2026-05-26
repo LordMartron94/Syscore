@@ -30,9 +30,12 @@ func waylandProtocolIRBuild(xmlPath string, interfaceNames []string) (map[string
 		return nil, err
 	}
 
+	wantAll := len(interfaceNames) == 0
 	want := make(map[string]struct{}, len(interfaceNames))
-	for _, name := range interfaceNames {
-		want[name] = struct{}{}
+	if !wantAll {
+		for _, name := range interfaceNames {
+			want[name] = struct{}{}
+		}
 	}
 
 	result := make(map[string]waylandInterfaceIR, len(interfaceNames))
@@ -41,7 +44,12 @@ func waylandProtocolIRBuild(xmlPath string, interfaceNames []string) (map[string
 			return
 		}
 		name := node.Attr("name")
-		if _, ok := want[name]; !ok {
+		if !wantAll {
+			if _, ok := want[name]; !ok {
+				return
+			}
+		}
+		if name == "" {
 			return
 		}
 		if _, exists := result[name]; exists {
@@ -50,9 +58,11 @@ func waylandProtocolIRBuild(xmlPath string, interfaceNames []string) (map[string
 		result[name] = waylandInterfaceIRFromNode(node)
 	})
 
-	for _, name := range interfaceNames {
-		if _, ok := result[name]; !ok {
-			return nil, fmt.Errorf("interface %q not found in %s", name, xmlPath)
+	if !wantAll {
+		for _, name := range interfaceNames {
+			if _, ok := result[name]; !ok {
+				return nil, fmt.Errorf("interface %q not found in %s", name, xmlPath)
+			}
 		}
 	}
 	return result, nil

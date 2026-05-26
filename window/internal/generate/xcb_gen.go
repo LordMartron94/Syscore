@@ -15,12 +15,21 @@ const (
 	xcbTypesGenFile     = "bindings_types_gen.go"
 )
 
-func xcbBindingsGenerate(xprotoXML string, xcbEventHeader string, outputDir string) error {
+func xcbBindingsGenerate(xprotoXML string, xcbEventHeader string, xcbICCCMHeader string, xcbEWMHAtomlist string, icccmHTML string, outputDir string) error {
 	if _, err := os.Stat(xprotoXML); err != nil {
 		return fmt.Errorf("xproto spec: %w", err)
 	}
 	if _, err := os.Stat(xcbEventHeader); err != nil {
 		return fmt.Errorf("xcb event header: %w", err)
+	}
+	if _, err := os.Stat(xcbICCCMHeader); err != nil {
+		return fmt.Errorf("xcb icccm header: %w", err)
+	}
+	if _, err := os.Stat(xcbEWMHAtomlist); err != nil {
+		return fmt.Errorf("xcb ewmh atomlist: %w", err)
+	}
+	if _, err := os.Stat(icccmHTML); err != nil {
+		return fmt.Errorf("icccm html: %w", err)
 	}
 
 	ir, err := xprotoIRBuild(xprotoXML)
@@ -32,8 +41,31 @@ func xcbBindingsGenerate(xprotoXML string, xcbEventHeader string, outputDir stri
 	if err != nil {
 		return err
 	}
+	sizeHintPSize, err := cHeaderEnumItemValueGet(xcbICCCMHeader, "XCB_ICCCM_SIZE_HINT_P_SIZE")
+	if err != nil {
+		return err
+	}
+	sizeHintPMinSize, err := cHeaderEnumItemValueGet(xcbICCCMHeader, "XCB_ICCCM_SIZE_HINT_P_MIN_SIZE")
+	if err != nil {
+		return err
+	}
+	sizeHintPMaxSize, err := cHeaderEnumItemValueGet(xcbICCCMHeader, "XCB_ICCCM_SIZE_HINT_P_MAX_SIZE")
+	if err != nil {
+		return err
+	}
+	ewmhAtomNames, err := xcbEWMHAtomNamesParse(xcbEWMHAtomlist)
+	if err != nil {
+		return err
+	}
+	wmDeleteWindow, err := xcbAtomNameFromConstName("XCB_ATOM_WM_DELETE_WINDOW")
+	if err != nil {
+		return err
+	}
+	if err := textTokenRequire(icccmHTML, wmDeleteWindow); err != nil {
+		return err
+	}
 
-	if err := xcbConstantsGenerate(outputDir, ir, eventResponseTypeMask); err != nil {
+	if err := xcbConstantsGenerate(outputDir, ir, ewmhAtomNames, wmDeleteWindow, eventResponseTypeMask, sizeHintPSize, sizeHintPMinSize, sizeHintPMaxSize); err != nil {
 		return err
 	}
 	if err := xcbTypesGenerate(outputDir, ir); err != nil {
@@ -42,21 +74,47 @@ func xcbBindingsGenerate(xprotoXML string, xcbEventHeader string, outputDir stri
 	return bindingFilesFormat(outputDir, xcbConstantsGenFile, xcbTypesGenFile)
 }
 
-func xcbConstantsGenerate(outputDir string, ir *xprotoIR, eventResponseTypeMaskValueExpr string) error {
+func xcbConstantsGenerate(outputDir string, ir *xprotoIR, ewmhAtomNames map[string]struct{}, wmDeleteWindow string, eventResponseTypeMaskValueExpr string, sizeHintPSizeValueExpr string, sizeHintPMinSizeValueExpr string, sizeHintPMaxSizeValueExpr string) error {
 	elements := bindingFilePreamble("bindings", "linux")
+	elements = bindingElementsWithImport(elements, "unsafe")
+
+	wmName, err := xcbAtomNameFromXprotoRequire(ir, "WM_NAME")
+	if err != nil {
+		return err
+	}
+	wmNormalHints, err := xcbAtomNameFromXprotoRequire(ir, "WM_NORMAL_HINTS")
+	if err != nil {
+		return err
+	}
+	wmSizeHints, err := xcbAtomNameFromXprotoRequire(ir, "WM_SIZE_HINTS")
+	if err != nil {
+		return err
+	}
+	netWMName, err := xcbAtomNameFromEWMHRequire(ewmhAtomNames, "_NET_WM_NAME")
+	if err != nil {
+		return err
+	}
+	utf8String, err := xcbAtomNameFromEWMHRequire(ewmhAtomNames, "UTF8_STRING")
+	if err != nil {
+		return err
+	}
+	wmProtocols, err := xcbAtomNameFromEWMHRequire(ewmhAtomNames, "WM_PROTOCOLS")
+	if err != nil {
+		return err
+	}
 
 	stringConsts := []struct {
 		name  string
 		value string
 		doc   string
 	}{
-		{"XCB_ATOM_WM_NAME", "WM_NAME", "XCB_ATOM_WM_NAME is the legacy WM_NAME property atom name."},
-		{"XCB_ATOM_NET_WM_NAME", "_NET_WM_NAME", "XCB_ATOM_NET_WM_NAME is the EWMH _NET_WM_NAME property atom name."},
-		{"XCB_ATOM_UTF8_STRING", "UTF8_STRING", "XCB_ATOM_UTF8_STRING is the UTF8_STRING type atom name."},
-		{"XCB_ATOM_WM_NORMAL_HINTS", "WM_NORMAL_HINTS", "XCB_ATOM_WM_NORMAL_HINTS is the WM_NORMAL_HINTS property atom name."},
-		{"XCB_ATOM_WM_SIZE_HINTS", "WM_SIZE_HINTS", "XCB_ATOM_WM_SIZE_HINTS is the WM_SIZE_HINTS type atom name for WM_NORMAL_HINTS values."},
-		{"XCB_ATOM_WM_PROTOCOLS", "WM_PROTOCOLS", "XCB_ATOM_WM_PROTOCOLS is the WM_PROTOCOLS property atom name."},
-		{"XCB_ATOM_WM_DELETE_WINDOW", "WM_DELETE_WINDOW", "XCB_ATOM_WM_DELETE_WINDOW is the WM_DELETE_WINDOW protocol atom name."},
+		{"XCB_ATOM_WM_NAME", wmName, "XCB_ATOM_WM_NAME is the legacy WM_NAME property atom name."},
+		{"XCB_ATOM_NET_WM_NAME", netWMName, "XCB_ATOM_NET_WM_NAME is the EWMH _NET_WM_NAME property atom name."},
+		{"XCB_ATOM_UTF8_STRING", utf8String, "XCB_ATOM_UTF8_STRING is the UTF8_STRING type atom name."},
+		{"XCB_ATOM_WM_NORMAL_HINTS", wmNormalHints, "XCB_ATOM_WM_NORMAL_HINTS is the WM_NORMAL_HINTS property atom name."},
+		{"XCB_ATOM_WM_SIZE_HINTS", wmSizeHints, "XCB_ATOM_WM_SIZE_HINTS is the WM_SIZE_HINTS type atom name for WM_NORMAL_HINTS values."},
+		{"XCB_ATOM_WM_PROTOCOLS", wmProtocols, "XCB_ATOM_WM_PROTOCOLS is the WM_PROTOCOLS property atom name."},
+		{"XCB_ATOM_WM_DELETE_WINDOW", wmDeleteWindow, "XCB_ATOM_WM_DELETE_WINDOW is the WM_DELETE_WINDOW protocol atom name."},
 	}
 	specs := make([]gocode.ConstSpec, 0, 32)
 	for _, item := range stringConsts {
@@ -107,14 +165,14 @@ func xcbConstantsGenerate(outputDir string, ir *xprotoIR, eventResponseTypeMaskV
 		),
 		gocode.ConstSpecNew("XCB_RESPONSE_TYPE_EVENT_CODE_MASK", gocode.TypeExprNamedPtr("uint8"), eventResponseTypeMaskValueExpr, "XCB_RESPONSE_TYPE_EVENT_CODE_MASK masks the core event code from response_type (X11 core protocol send_event flag is bit 7)."),
 		gocode.ConstSpecNew("XCB_RESPONSE_TYPE_SENT_EVENT_FLAG", gocode.TypeExprNamedPtr("uint8"), "^XCB_RESPONSE_TYPE_EVENT_CODE_MASK", "XCB_RESPONSE_TYPE_SENT_EVENT_FLAG is set in response_type when the X server marks send_event=true (bit 7)."),
-		gocode.ConstSpecNew("XcbClientMessageEventWindowOffset", nil, "4", "XcbClientMessageEventWindowOffset is the byte offset of window in xcb_client_message_event_t."),
-		gocode.ConstSpecNew("XcbClientMessageEventData32Offset", nil, "12", "XcbClientMessageEventData32Offset is the byte offset of data32[0] in xcb_client_message_event_t."),
-		gocode.ConstSpecNew("XcbDestroyNotifyEventWindowOffset", nil, "8", "XcbDestroyNotifyEventWindowOffset is the byte offset of window in xcb_destroy_notify_event_t."),
-		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PSIZE", gocode.TypeExprNamedPtr("int32"), "1 << 2", "XCB_SIZE_HINTS_FLAG_PSIZE sets width and height in xcb_size_hints_t."),
-		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PMIN_SIZE", gocode.TypeExprNamedPtr("int32"), "1 << 4", "XCB_SIZE_HINTS_FLAG_PMIN_SIZE sets min_width and min_height."),
-		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PMAX_SIZE", gocode.TypeExprNamedPtr("int32"), "1 << 5", "XCB_SIZE_HINTS_FLAG_PMAX_SIZE sets max_width and max_height."),
-		gocode.ConstSpecNew("XcbInternAtomReplyAtomOffset", nil, "8", "XcbInternAtomReplyAtomOffset is the byte offset of atom in xcb_intern_atom_reply_t."),
-		gocode.ConstSpecNew("XcbSizeHintsPropertyWordCount", gocode.TypeExprNamedPtr("uint32"), "18", "XcbSizeHintsPropertyWordCount is the xcb_change_property data length for XcbSizeHints."),
+		gocode.ConstSpecNew("XcbClientMessageEventWindowOffset", nil, "unsafe.Offsetof(XcbClientMessageEvent{}.Window)", "XcbClientMessageEventWindowOffset is the byte offset of window in xcb_client_message_event_t."),
+		gocode.ConstSpecNew("XcbClientMessageEventData32Offset", nil, "unsafe.Offsetof(XcbClientMessageEvent{}.Data)", "XcbClientMessageEventData32Offset is the byte offset of data32[0] in xcb_client_message_event_t."),
+		gocode.ConstSpecNew("XcbDestroyNotifyEventWindowOffset", nil, "unsafe.Offsetof(XcbDestroyNotifyEvent{}.Window)", "XcbDestroyNotifyEventWindowOffset is the byte offset of window in xcb_destroy_notify_event_t."),
+		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PSIZE", gocode.TypeExprNamedPtr("int32"), sizeHintPSizeValueExpr, "XCB_SIZE_HINTS_FLAG_PSIZE sets width and height in xcb_size_hints_t."),
+		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PMIN_SIZE", gocode.TypeExprNamedPtr("int32"), sizeHintPMinSizeValueExpr, "XCB_SIZE_HINTS_FLAG_PMIN_SIZE sets min_width and min_height."),
+		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PMAX_SIZE", gocode.TypeExprNamedPtr("int32"), sizeHintPMaxSizeValueExpr, "XCB_SIZE_HINTS_FLAG_PMAX_SIZE sets max_width and max_height."),
+		gocode.ConstSpecNew("XcbInternAtomReplyAtomOffset", nil, "unsafe.Offsetof(struct{ ResponseType uint8; Pad0 uint8; Sequence uint16; Length uint32; Atom XcbAtomT }{}.Atom)", "XcbInternAtomReplyAtomOffset is the byte offset of atom in xcb_intern_atom_reply_t."),
+		gocode.ConstSpecNew("XcbSizeHintsPropertyWordCount", gocode.TypeExprNamedPtr("uint32"), "uint32(unsafe.Sizeof(XcbSizeHints{}) / unsafe.Sizeof(int32(0)))", "XcbSizeHintsPropertyWordCount is the xcb_change_property data length for XcbSizeHints."),
 	}
 	specs = append(specs, numericConsts...)
 	elements = append(elements, gocode.FileElementFrom(gocode.DeclConstGroup(specs, "", true)))
@@ -162,6 +220,94 @@ func cHeaderDefineValueGet(headerPath string, defineName string) (string, error)
 		return "", err
 	}
 	return "", fmt.Errorf("header %s: missing #define %s", headerPath, defineName)
+}
+
+func cHeaderEnumItemValueGet(headerPath string, itemName string) (string, error) {
+	f, err := os.Open(headerPath)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if !strings.Contains(line, itemName) {
+			continue
+		}
+		equalsIndex := strings.Index(line, "=")
+		if equalsIndex < 0 {
+			continue
+		}
+		left := strings.TrimSpace(line[:equalsIndex])
+		if left != itemName {
+			continue
+		}
+		right := strings.TrimSpace(line[equalsIndex+1:])
+		right = strings.TrimSuffix(right, ",")
+		right = strings.TrimSpace(right)
+		if right == "" {
+			return "", fmt.Errorf("header %s: enum item %s has empty value", headerPath, itemName)
+		}
+		return right, nil
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+	return "", fmt.Errorf("header %s: missing enum item %s", headerPath, itemName)
+}
+
+func xcbEWMHAtomNamesParse(atomlistPath string) (map[string]struct{}, error) {
+	content, err := os.ReadFile(atomlistPath)
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(string(content))
+	trimmed = strings.TrimPrefix(trimmed, "DO(")
+	trimmed = strings.TrimSuffix(trimmed, ")")
+	parts := strings.Split(trimmed, ",")
+	names := make(map[string]struct{}, len(parts))
+	for _, part := range parts {
+		name := strings.TrimSpace(part)
+		if name == "" {
+			continue
+		}
+		names[name] = struct{}{}
+	}
+	return names, nil
+}
+
+func textTokenRequire(path string, token string) error {
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	if !strings.Contains(string(content), token) {
+		return fmt.Errorf("%s: token %q not found", path, token)
+	}
+	return nil
+}
+
+func xcbAtomNameFromXprotoRequire(ir *xprotoIR, itemName string) (string, error) {
+	if _, ok := xprotoEnumValueGet(ir, "Atom", itemName); !ok {
+		return "", fmt.Errorf("xproto: Atom.%s not found in spec", itemName)
+	}
+	return itemName, nil
+}
+
+func xcbAtomNameFromEWMHRequire(atomNames map[string]struct{}, itemName string) (string, error) {
+	if _, ok := atomNames[itemName]; !ok {
+		return "", fmt.Errorf("ewmh atomlist: %s not found", itemName)
+	}
+	return itemName, nil
+}
+
+func xcbAtomNameFromConstName(constName string) (string, error) {
+	const prefix = "XCB_ATOM_"
+	if !strings.HasPrefix(constName, prefix) {
+		return "", fmt.Errorf("atom const name %q missing %q prefix", constName, prefix)
+	}
+	return strings.TrimPrefix(constName, prefix), nil
 }
 
 func xcbTypesGenerate(outputDir string, ir *xprotoIR) error {

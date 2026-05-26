@@ -53,6 +53,18 @@
       "relativePath": "vendor/libxcb-util/src/xcb_event.h",
       "sha256": "a29545f9f254904e4623b622d08f10a2950940344694e7e9fdbd85b5bed88503"
     },
+    "xcb-icccm-header": {
+      "relativePath": "vendor/libxcb-wm/icccm/xcb_icccm.h",
+      "sha256": "5a54e8a7fb867558e00d3a60786af9f3d64ca60646fca685156f2a679024b472"
+    },
+    "xcb-ewmh-atomlist": {
+      "relativePath": "vendor/libxcb-wm/ewmh/atomlist.m4",
+      "sha256": "b1425e429a66d6accabef339ca66dda31d730dab54dbdcbf84af5ca8ce71d8b6"
+    },
+    "icccm-html": {
+      "relativePath": "vendor/icccm/icccm.html",
+      "sha256": "24d80b93c02208bd613aad0da3b04b5cee58fd13716ed3a055ebc4e233d8bfc3"
+    },
     "win32-winmd": {
       "relativePath": "win32/Windows.Win32.winmd",
       "sha256": "ab164668e6a0ce9c3254226b9ea9605b06c41b3da3e93d104ebdaa622517a534",

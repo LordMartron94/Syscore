@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"path/filepath"
-
-	gocode "codegen/go"
 )
 
 func main() {
@@ -84,6 +82,18 @@ func windowGenerateLinux(specRoot string, manifest windowSpecManifest, waylandBi
 	if err != nil {
 		return err
 	}
+	xcbICCCMHeader, err := windowSpecInputPathResolve(specRoot, manifest, "xcb-icccm-header")
+	if err != nil {
+		return err
+	}
+	xcbEWMHAtomlist, err := windowSpecInputPathResolve(specRoot, manifest, "xcb-ewmh-atomlist")
+	if err != nil {
+		return err
+	}
+	icccmHTML, err := windowSpecInputPathResolve(specRoot, manifest, "icccm-html")
+	if err != nil {
+		return err
+	}
 
 	waylandSubmodule, ok := manifest.Submodules["wayland"]
 	if !ok {
@@ -96,10 +106,8 @@ func windowGenerateLinux(specRoot string, manifest windowSpecManifest, waylandBi
 			waylandXML,
 			waylandClientHeader,
 			waylandBindings,
-			[]string{"wl_display", "wl_registry", "wl_compositor", "wl_surface"},
-			map[string][]string{
-				"wl_registry": {"global", "global_remove"},
-			},
+			nil,
+			nil,
 			nil,
 			true,
 		); err != nil {
@@ -109,19 +117,13 @@ func windowGenerateLinux(specRoot string, manifest windowSpecManifest, waylandBi
 	}
 
 	if xdgBindings != "" {
-		extra := []gocode.ConstSpec{
-			bindingConstSpecString("XDG_WM_BASE_GLOBAL_NAME", "xdg_wm_base", "XDG_WM_BASE_GLOBAL_NAME is the registry global name for xdg_wm_base."),
-		}
 		if err := waylandBindingsGenerate(
 			xdgXML,
 			waylandClientHeader,
 			xdgBindings,
-			[]string{"xdg_wm_base", "xdg_surface", "xdg_toplevel"},
-			map[string][]string{
-				"xdg_surface":  {"configure"},
-				"xdg_toplevel": {"configure", "close"},
-			},
-			extra,
+			nil,
+			nil,
+			nil,
 			false,
 		); err != nil {
 			return err
@@ -130,7 +132,7 @@ func windowGenerateLinux(specRoot string, manifest windowSpecManifest, waylandBi
 	}
 
 	if xcbBindings != "" {
-		if err := xcbBindingsGenerate(xprotoXML, xcbEventHeader, xcbBindings); err != nil {
+		if err := xcbBindingsGenerate(xprotoXML, xcbEventHeader, xcbICCCMHeader, xcbEWMHAtomlist, icccmHTML, xcbBindings); err != nil {
 			return err
 		}
 		fmt.Printf("Wrote XCB bindings to %s\n", xcbBindings)
@@ -198,7 +200,10 @@ func windowGenerateAppkit(specRoot string, manifest windowSpecManifest, appkitBi
 		if err != nil {
 			return err
 		}
-		if err := appkitBindingsGenerate(enumsPath, appkitBindings); err != nil {
+		sourceRoot := filepath.Dir(filepath.Dir(enumsPath))
+		appkitSourcePath := filepath.Join(sourceRoot, "appkit.cs")
+		foundationEnumsPath := filepath.Join(sourceRoot, "Foundation", "Enums.cs")
+		if err := appkitBindingsGenerate(enumsPath, appkitSourcePath, foundationEnumsPath, appkitBindings); err != nil {
 			return err
 		}
 		fmt.Printf("Wrote AppKit bindings to %s\n", appkitBindings)
