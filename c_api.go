@@ -119,6 +119,30 @@ func SYSCORE_C_CStringPointerToString(ptr uintptr) string {
 }
 
 /*
+SYSCORE_C_CStringBytePointerToString reads a NUL-terminated C string from a *byte pointer.
+
+[Context]
+Use when purego bindings expose char* as *byte (for example PFN names passed to
+vkGetInstanceProcAddr). Prefer this over SYSCORE_C_CStringPointerToString when the FFI
+surface already types the argument as *byte.
+
+[Parameters]
+ptr - Pointer to the first byte; nil returns "".
+
+[Returns]
+Decoded string up to the first NUL.
+
+[Side Effects]
+Reads foreign memory at ptr until NUL. No writes.
+
+[Edge Cases]
+Invalid or unmapped ptr can panic; callers must ensure the pointer came from valid FFI memory.
+*/
+func SYSCORE_C_CStringBytePointerToString(ptr *byte) string {
+	return internal.CStringBytePointerToString(ptr)
+}
+
+/*
 SYSCORE_C_StringToUTF16 converts a Go string to a NUL-terminated UTF-16 string for Win32 LPCWSTR.
 
 [Context]

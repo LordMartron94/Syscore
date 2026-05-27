@@ -38,6 +38,13 @@ func CStringPointerToString(ptr uintptr) string {
 	return string(slice)
 }
 
+func CStringBytePointerToString(ptr *byte) string {
+	if ptr == nil {
+		return ""
+	}
+	return CStringPointerToString(uintptr(unsafe.Pointer(ptr)))
+}
+
 func StringToUTF16(str string) ([]uint16, *uint16) {
 	encoded := utf16.Encode([]rune(str))
 	encoded = append(encoded, 0)

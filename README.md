@@ -45,6 +45,7 @@ Helpers for passing data across the Go/C boundary without cgo:
 | `SYSCORE_C_StringToCStringSlice` | Same, slice only |
 | `SYSCORE_C_CStringToString` | NUL-terminated `[]byte` → Go string |
 | `SYSCORE_C_CStringPointerToString` | C `char*` address → Go string |
+| `SYSCORE_C_CStringBytePointerToString` | C `char*` as `*byte` → Go string |
 | `SYSCORE_C_StringToUTF16` | Go string → NUL-terminated UTF-16 (Win32) |
 
 ## Pure FFI (`SYSCORE_Pure_*`)
