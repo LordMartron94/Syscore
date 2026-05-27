@@ -12,17 +12,6 @@ func AppkitCommandsLoad(module AppkitModule, commands *AppkitCommands) error {
 	return appkitCommandsBind(module, commands, appkitCommandMappingsAll(commands))
 }
 
-func appkitCommandMappingsAll(commands *AppkitCommands) []loadutil.CommandMapping {
-	return []loadutil.CommandMapping{
-		{Target: &commands.ObjcGetClass, Name: "objc_getClass"},
-		{Target: &commands.SelRegisterName, Name: "sel_registerName"},
-		{Target: &commands.ObjcMsgSend, Name: "objc_msgSend"},
-		{Target: &commands.ObjcAllocateClassPair, Name: "objc_allocateClassPair"},
-		{Target: &commands.ObjcRegisterClassPair, Name: "objc_registerClassPair"},
-		{Target: &commands.ClassAddMethod, Name: "class_addMethod"},
-	}
-}
-
 func appkitCommandsBind(module AppkitModule, commands *AppkitCommands, mappings []loadutil.CommandMapping) error {
 	if commands == nil {
 		return fmt.Errorf("appkit loader: commands must not be nil")

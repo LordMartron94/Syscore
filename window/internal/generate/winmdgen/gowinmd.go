@@ -989,12 +989,26 @@ func escapeParam(s string) string {
 	return s
 }
 
-// escapedUpper returns the given string with the first character in uppercase. All Go keywords are
-// lowercase, so uppercasing the first letter does two things: escapes names like "type" and exports
-// the generated types/fields.
+// escapedUpper returns the given string transformed into a valid exported Go identifier.
+//
+// Two normalisations are applied:
+//
+//   - Leading C struct-tag underscores ("_FOO") are stripped so the result is exported. Win32
+//     metadata exposes many internal struct tags such as _PACKAGE_INFO_REFERENCE; without this
+//     adjustment they would be unreachable from other generated packages.
+//   - The first character is uppercased so reserved Go keywords (type, func, ...) are escaped and
+//     the identifier becomes exported. Names starting with a digit (after stripping underscores)
+//     get an "X" prefix to remain valid Go identifiers.
 func escapedUpper(s string) string {
-	if len(s) > 1 {
-		s = strings.ToUpper(string(s[0])) + s[1:]
+	trimmed := strings.TrimLeft(s, "_")
+	if trimmed == "" {
+		return s
 	}
-	return s
+	if c := trimmed[0]; c >= '0' && c <= '9' {
+		trimmed = "X" + trimmed
+	}
+	if len(trimmed) > 1 {
+		return strings.ToUpper(string(trimmed[0])) + trimmed[1:]
+	}
+	return strings.ToUpper(trimmed)
 }

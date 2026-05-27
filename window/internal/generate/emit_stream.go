@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"codegen"
 	gocode "codegen/go"
@@ -77,4 +78,22 @@ func bindingFileStreamFormat(stream *bindingFileStream) error {
 		return nil
 	}
 	return bindingFilesFormat(filepath.Dir(stream.path), filepath.Base(stream.path))
+}
+
+func win32BindingStreamWriteImportBlock(stream *bindingFileStream, imports map[string]string) error {
+	if stream == nil || len(imports) == 0 {
+		return nil
+	}
+
+	importPaths := make([]string, 0, len(imports))
+	for importPath := range imports {
+		importPaths = append(importPaths, importPath)
+	}
+	sort.Strings(importPaths)
+
+	elements := []codegen.FileElement{
+		gocode.FileElementFrom(gocode.DeclImportBlock(importPaths...)),
+	}
+	bindingBlankLine(&elements)
+	return bindingFileStreamWriteElements(stream, elements...)
 }

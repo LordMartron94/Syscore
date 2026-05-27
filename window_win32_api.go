@@ -3,9 +3,30 @@
 package syscore
 
 import (
-	"syscore/window/win32/bindings"
+	"unsafe"
+
+	kernel32 "syscore/window/win32/bindings/pfn/kernel32_dll"
+	user32 "syscore/window/win32/bindings/pfn/user32_dll"
+	foundation "syscore/window/win32/bindings/types/windows_win32_foundation"
+	gdi "syscore/window/win32/bindings/types/windows_win32_graphics_gdi"
+	wm "syscore/window/win32/bindings/types/windows_win32_ui_windowsandmessaging"
 	"syscore/window/win32/loader"
 )
+
+/*
+SYSCORE_Window_Win32_CursorArrow returns the *PWSTRElement form of the IDC_ARROW pseudo-resource.
+
+[Context]
+Win32 uses MAKEINTRESOURCE(32512) for IDC_ARROW: the integer is stored in the low bits of a
+PWSTR-typed pointer. LoadCursorW accepts this as the lpCursorName argument. The returned pointer
+must not be dereferenced - it is a tagged scalar, not a real string.
+
+[Returns]
+A *PWSTRElement value carrying 32512 in its address bits.
+*/
+func SYSCORE_Window_Win32_CursorArrow() *SYSCORE_Window_Win32_PWSTRElement {
+	return (*SYSCORE_Window_Win32_PWSTRElement)(unsafe.Pointer(SYSCORE_Window_Win32_CursorArrowResource))
+}
 
 /*
 SYSCORE_Window_Win32_Module holds loaded user32.dll and kernel32.dll handles.
@@ -30,53 +51,80 @@ SYSCORE_Window_Win32_CommandManifest lists Win32 entry points for selective bind
 type SYSCORE_Window_Win32_CommandManifest = loader.Win32CommandManifest
 
 const (
-	SYSCORE_Window_Win32_StyleOverlappedWindow = bindings.WS_OVERLAPPEDWINDOW
+	SYSCORE_Window_Win32_StyleOverlappedWindow = wm.WS_OVERLAPPEDWINDOW
 	// SYSCORE_Window_Win32_StyleOverlappedWindowFixed is WS_OVERLAPPED|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX (0x00CA0000); not a single winmd enum member.
-	SYSCORE_Window_Win32_StyleOverlappedWindowFixed = bindings.WS_OVERLAPPED | bindings.WS_CAPTION | bindings.WS_SYSMENU | bindings.WS_MINIMIZEBOX
-	SYSCORE_Window_Win32_StyleExAppWindow           = bindings.WS_EX_APPWINDOW
-	SYSCORE_Window_Win32_UseDefault                 = bindings.CW_USEDEFAULT
-	SYSCORE_Window_Win32_ClassStyleHRedraw          = bindings.CS_HREDRAW
-	SYSCORE_Window_Win32_ClassStyleVRedraw          = bindings.CS_VREDRAW
-	SYSCORE_Window_Win32_ColorWindow                = bindings.COLOR_WINDOW
-	// SYSCORE_Window_Win32_CursorArrow is MAKEINTRESOURCE(32512); winmd models IDC_ARROW as *PWSTRElement, not a LoadCursorW name token.
-	SYSCORE_Window_Win32_CursorArrow uintptr = 32512
-	SYSCORE_Window_Win32_ShowWindow                 = bindings.SW_SHOW
-	SYSCORE_Window_Win32_MessageClose               = bindings.WM_CLOSE
-	SYSCORE_Window_Win32_MessageDestroy             = bindings.WM_DESTROY
-	SYSCORE_Window_Win32_PeekMessageRemove          = bindings.PM_REMOVE
+	SYSCORE_Window_Win32_StyleOverlappedWindowFixed = wm.WS_OVERLAPPED | wm.WS_CAPTION | wm.WS_SYSMENU | wm.WS_MINIMIZEBOX
+	SYSCORE_Window_Win32_StyleExAppWindow           = wm.WS_EX_APPWINDOW
+	SYSCORE_Window_Win32_UseDefault                 = wm.CW_USEDEFAULT
+	SYSCORE_Window_Win32_ClassStyleHRedraw          = wm.CS_HREDRAW
+	SYSCORE_Window_Win32_ClassStyleVRedraw          = wm.CS_VREDRAW
+	// SYSCORE_Window_Win32_ColorWindow exposes COLOR_WINDOW from the Graphics.Gdi SYS_COLOR_INDEX
+	// enum. The system color index lives in graphics_gdi rather than ui_windowsandmessaging in
+	// the win32 metadata.
+	SYSCORE_Window_Win32_ColorWindow = gdi.COLOR_WINDOW
+	// SYSCORE_Window_Win32_CursorArrowResource is the IDC_ARROW raw resource id; LoadCursorW
+	// expects this value packed into a *PWSTRElement via MAKEINTRESOURCE semantics. Use
+	// SYSCORE_Window_Win32_CursorArrow to obtain that pointer.
+	SYSCORE_Window_Win32_CursorArrowResource uintptr = 32512
+	SYSCORE_Window_Win32_ShowWindow                  = wm.SW_SHOW
+	SYSCORE_Window_Win32_MessageClose                = wm.WM_CLOSE
+	SYSCORE_Window_Win32_MessageDestroy              = wm.WM_DESTROY
+	SYSCORE_Window_Win32_PeekMessageRemove           = wm.PM_REMOVE
 )
 
 type (
 	// SYSCORE_Window_Win32_HWND is a Win32 window handle.
-	SYSCORE_Window_Win32_HWND = bindings.HWND
+	SYSCORE_Window_Win32_HWND = foundation.HWND
 	// SYSCORE_Window_Win32_HINSTANCE is a Win32 module instance handle.
-	SYSCORE_Window_Win32_HINSTANCE = bindings.HINSTANCE
+	SYSCORE_Window_Win32_HINSTANCE = foundation.HINSTANCE
+	// SYSCORE_Window_Win32_HMODULE is a Win32 loaded module handle (returned by GetModuleHandleW).
+	SYSCORE_Window_Win32_HMODULE = foundation.HMODULE
 	// SYSCORE_Window_Win32_HBRUSH is a Win32 brush handle.
-	SYSCORE_Window_Win32_HBRUSH = bindings.HBRUSH
+	SYSCORE_Window_Win32_HBRUSH = gdi.HBRUSH
+	// SYSCORE_Window_Win32_HCURSOR is a Win32 cursor handle.
+	SYSCORE_Window_Win32_HCURSOR = wm.HCURSOR
+	// SYSCORE_Window_Win32_WPARAM is the wParam scalar passed to a window procedure.
+	SYSCORE_Window_Win32_WPARAM = foundation.WPARAM
+	// SYSCORE_Window_Win32_LPARAM is the lParam scalar passed to a window procedure.
+	SYSCORE_Window_Win32_LPARAM = foundation.LPARAM
+	// SYSCORE_Window_Win32_LRESULT is the LRESULT returned by a window procedure.
+	SYSCORE_Window_Win32_LRESULT = foundation.LRESULT
+	// SYSCORE_Window_Win32_WNDPROC is the window-procedure function pointer type used in WNDCLASSEXW.LpfnWndProc.
+	SYSCORE_Window_Win32_WNDPROC = wm.WNDPROC
+	// SYSCORE_Window_Win32_PWSTRElement is the UTF-16 code unit type used to back PWSTR/LPCWSTR pointers.
+	SYSCORE_Window_Win32_PWSTRElement = foundation.PWSTRElement
+	// SYSCORE_Window_Win32_WindowStyle is the WINDOW_STYLE enum (WS_*) accepted by CreateWindowExW.
+	SYSCORE_Window_Win32_WindowStyle = wm.WINDOW_STYLE
+	// SYSCORE_Window_Win32_WindowExStyle is the WINDOW_EX_STYLE enum (WS_EX_*) accepted by CreateWindowExW.
+	SYSCORE_Window_Win32_WindowExStyle = wm.WINDOW_EX_STYLE
+	// SYSCORE_Window_Win32_ShowWindowCmd is the SHOW_WINDOW_CMD enum (SW_*) accepted by ShowWindow.
+	SYSCORE_Window_Win32_ShowWindowCmd = wm.SHOW_WINDOW_CMD
+	// SYSCORE_Window_Win32_PeekMessageRemoveType is the PEEK_MESSAGE_REMOVE_TYPE enum (PM_*) accepted by PeekMessageW.
+	SYSCORE_Window_Win32_PeekMessageRemoveType = wm.PEEK_MESSAGE_REMOVE_TYPE
 	// SYSCORE_Window_Win32_WNDCLASSEXW is the WNDCLASSEXW structure for RegisterClassExW.
-	SYSCORE_Window_Win32_WNDCLASSEXW = bindings.WNDCLASSEXW
+	SYSCORE_Window_Win32_WNDCLASSEXW = wm.WNDCLASSEXW
 	// SYSCORE_Window_Win32_PFN_GetModuleHandleW is the C type for GetModuleHandleW.
-	SYSCORE_Window_Win32_PFN_GetModuleHandleW = bindings.PFN_GetModuleHandleW
+	SYSCORE_Window_Win32_PFN_GetModuleHandleW = kernel32.PFN_GetModuleHandleW
 	// SYSCORE_Window_Win32_PFN_RegisterClassExW is the C type for RegisterClassExW.
-	SYSCORE_Window_Win32_PFN_RegisterClassExW = bindings.PFN_RegisterClassExW
+	SYSCORE_Window_Win32_PFN_RegisterClassExW = user32.PFN_RegisterClassExW
 	// SYSCORE_Window_Win32_PFN_CreateWindowExW is the C type for CreateWindowExW.
-	SYSCORE_Window_Win32_PFN_CreateWindowExW = bindings.PFN_CreateWindowExW
+	SYSCORE_Window_Win32_PFN_CreateWindowExW = user32.PFN_CreateWindowExW
 	// SYSCORE_Window_Win32_PFN_DefWindowProcW is the C type for DefWindowProcW.
-	SYSCORE_Window_Win32_PFN_DefWindowProcW = bindings.PFN_DefWindowProcW
+	SYSCORE_Window_Win32_PFN_DefWindowProcW = user32.PFN_DefWindowProcW
 	// SYSCORE_Window_Win32_PFN_ShowWindow is the C type for ShowWindow.
-	SYSCORE_Window_Win32_PFN_ShowWindow = bindings.PFN_ShowWindow
+	SYSCORE_Window_Win32_PFN_ShowWindow = user32.PFN_ShowWindow
 	// SYSCORE_Window_Win32_PFN_UpdateWindow is the C type for UpdateWindow.
-	SYSCORE_Window_Win32_PFN_UpdateWindow = bindings.PFN_UpdateWindow
+	SYSCORE_Window_Win32_PFN_UpdateWindow = user32.PFN_UpdateWindow
 	// SYSCORE_Window_Win32_PFN_LoadCursorW is the C type for LoadCursorW.
-	SYSCORE_Window_Win32_PFN_LoadCursorW = bindings.PFN_LoadCursorW
+	SYSCORE_Window_Win32_PFN_LoadCursorW = user32.PFN_LoadCursorW
 	// SYSCORE_Window_Win32_PFN_DestroyWindow is the C type for DestroyWindow.
-	SYSCORE_Window_Win32_PFN_DestroyWindow = bindings.PFN_DestroyWindow
+	SYSCORE_Window_Win32_PFN_DestroyWindow = user32.PFN_DestroyWindow
 	// SYSCORE_Window_Win32_PFN_PeekMessageW is the C type for PeekMessageW.
-	SYSCORE_Window_Win32_PFN_PeekMessageW = bindings.PFN_PeekMessageW
+	SYSCORE_Window_Win32_PFN_PeekMessageW = user32.PFN_PeekMessageW
 	// SYSCORE_Window_Win32_PFN_DispatchMessageW is the C type for DispatchMessageW.
-	SYSCORE_Window_Win32_PFN_DispatchMessageW = bindings.PFN_DispatchMessageW
+	SYSCORE_Window_Win32_PFN_DispatchMessageW = user32.PFN_DispatchMessageW
 	// SYSCORE_Window_Win32_MSG is the Win32 MSG structure.
-	SYSCORE_Window_Win32_MSG = bindings.MSG
+	SYSCORE_Window_Win32_MSG = wm.MSG
 )
 
 /*
