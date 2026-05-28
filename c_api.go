@@ -1,6 +1,10 @@
 package syscore
 
-import "syscore/internal"
+import (
+	"memarch"
+	"memcore"
+	"syscore/internal"
+)
 
 /*
 SYSCORE_C_StringToCString converts a Go string to a NUL-terminated UTF-8 C string.
@@ -27,6 +31,49 @@ Allocates a new slice. Pure aside from allocation.
 */
 func SYSCORE_C_StringToCString(str string) ([]byte, *byte) {
 	return internal.StringToCString(str)
+}
+
+/*
+SYSCORE_C_StringToCStringManual allocates a NUL-terminated UTF-8 C string in manual memory.
+
+[Context]
+Use this for FFI pointers that must not rely on Go heap slice lifetime. The returned pointer
+is backed by memory allocated via the provided memarch allocation function.
+
+[Parameters]
+allocFn - Allocation function used to reserve manual memory.
+str - Source string encoded as UTF-8 with an appended NUL terminator.
+
+[Returns]
+The manual memory mark and a pointer to the first byte of the C string.
+
+[Side Effects]
+Allocates memory through allocFn.
+*/
+func SYSCORE_C_StringToCStringManual(allocFn memarch.AllocationFn, str string) (memcore.MarkRaw, *byte) {
+	return memarch.MemArchCStringCreate(allocFn, str)
+}
+
+/*
+SYSCORE_C_StringToCStringFirstByteManual allocates a NUL-terminated UTF-8 C string in manual
+memory and returns only the first-byte pointer.
+
+[Context]
+Use this for APIs that only require *byte while still keeping storage off the Go heap.
+
+[Parameters]
+allocFn - Allocation function used to reserve manual memory.
+str - Source string encoded as UTF-8 with an appended NUL terminator.
+
+[Returns]
+Pointer to the first byte of the manually allocated C string.
+
+[Side Effects]
+Allocates memory through allocFn.
+*/
+func SYSCORE_C_StringToCStringFirstByteManual(allocFn memarch.AllocationFn, str string) *byte {
+	_, firstByte := memarch.MemArchCStringCreate(allocFn, str)
+	return firstByte
 }
 
 /*
@@ -140,6 +187,37 @@ Invalid or unmapped ptr can panic; callers must ensure the pointer came from val
 */
 func SYSCORE_C_CStringBytePointerToString(ptr *byte) string {
 	return internal.CStringBytePointerToString(ptr)
+}
+
+/*
+SYSCORE_C_CStringBytePointerLength returns the payload byte length of a NUL-terminated C string.
+
+[Parameters]
+ptr - Pointer to the first byte; nil returns 0.
+
+[Returns]
+Length in bytes excluding the terminating NUL.
+*/
+func SYSCORE_C_CStringBytePointerLength(ptr *byte) uint64 {
+	return internal.CStringBytePointerLength(ptr)
+}
+
+/*
+SYSCORE_C_CStringBytePointerToBytes returns a byte-slice view over a C string pointer.
+
+[Context]
+This is a zero-copy view into foreign/manual memory. The returned slice is valid only while the
+pointed memory remains valid and unchanged.
+
+[Parameters]
+ptr - Pointer to a NUL-terminated C string.
+includeTerminator - When true, includes the trailing NUL byte in the returned slice.
+
+[Returns]
+A byte slice view of the C string bytes; nil for nil pointer (or empty payload when terminator is excluded).
+*/
+func SYSCORE_C_CStringBytePointerToBytes(ptr *byte, includeTerminator bool) []byte {
+	return internal.CStringBytePointerToBytes(ptr, includeTerminator)
 }
 
 /*

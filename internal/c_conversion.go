@@ -45,6 +45,36 @@ func CStringBytePointerToString(ptr *byte) string {
 	return CStringPointerToString(uintptr(unsafe.Pointer(ptr)))
 }
 
+func CStringBytePointerLength(ptr *byte) uint64 {
+	if ptr == nil {
+		return 0
+	}
+
+	start := unsafe.Pointer(ptr)
+	var length uint64
+	for {
+		if *(*byte)(unsafe.Add(start, length)) == 0 {
+			break
+		}
+		length++
+	}
+
+	return length
+}
+
+func CStringBytePointerToBytes(ptr *byte, includeTerminator bool) []byte {
+	length := CStringBytePointerLength(ptr)
+	if ptr == nil || (length == 0 && !includeTerminator) {
+		return nil
+	}
+
+	if includeTerminator {
+		length++
+	}
+
+	return unsafe.Slice(ptr, length)
+}
+
 func StringToUTF16(str string) ([]uint16, *uint16) {
 	encoded := utf16.Encode([]rune(str))
 	encoded = append(encoded, 0)
