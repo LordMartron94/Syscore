@@ -88,6 +88,10 @@ type (
 	SYSCORE_Window_Xcb_PFN_intern_atom = bindings.PFN_xcb_intern_atom
 	// SYSCORE_Window_Xcb_PFN_intern_atom_reply is the C type for xcb_intern_atom_reply.
 	SYSCORE_Window_Xcb_PFN_intern_atom_reply = bindings.PFN_xcb_intern_atom_reply
+	// SYSCORE_Window_Xcb_PFN_get_geometry is the C type for xcb_get_geometry.
+	SYSCORE_Window_Xcb_PFN_get_geometry = bindings.PFN_xcb_get_geometry
+	// SYSCORE_Window_Xcb_PFN_get_geometry_reply is the C type for xcb_get_geometry_reply.
+	SYSCORE_Window_Xcb_PFN_get_geometry_reply = bindings.PFN_xcb_get_geometry_reply
 	// SYSCORE_Window_Xcb_PFN_change_property is the C type for xcb_change_property.
 	SYSCORE_Window_Xcb_PFN_change_property = bindings.PFN_xcb_change_property
 	// SYSCORE_Window_Xcb_PFN_free is the C type for libc free(3) on XCB reply buffers.
@@ -277,6 +281,20 @@ SYSCORE_Window_Xcb_CommandManifestAddInternAtomReply registers xcb_intern_atom_r
 */
 func SYSCORE_Window_Xcb_CommandManifestAddInternAtomReply(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_intern_atom_reply) error {
 	return loader.XcbCommandManifestAddInternAtomReply(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddGetGeometry registers xcb_get_geometry for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddGetGeometry(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_get_geometry) error {
+	return loader.XcbCommandManifestAddGetGeometry(manifest, target)
+}
+
+/*
+SYSCORE_Window_Xcb_CommandManifestAddGetGeometryReply registers xcb_get_geometry_reply for selective loading.
+*/
+func SYSCORE_Window_Xcb_CommandManifestAddGetGeometryReply(manifest *SYSCORE_Window_Xcb_CommandManifest, target *SYSCORE_Window_Xcb_PFN_get_geometry_reply) error {
+	return loader.XcbCommandManifestAddGetGeometryReply(manifest, target)
 }
 
 /*

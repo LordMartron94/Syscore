@@ -120,6 +120,8 @@ type (
 	SYSCORE_Window_Win32_PFN_LoadCursorW = user32.PFN_LoadCursorW
 	// SYSCORE_Window_Win32_PFN_DestroyWindow is the C type for DestroyWindow.
 	SYSCORE_Window_Win32_PFN_DestroyWindow = user32.PFN_DestroyWindow
+	// SYSCORE_Window_Win32_PFN_GetClientRect is the C type for GetClientRect.
+	SYSCORE_Window_Win32_PFN_GetClientRect = user32.PFN_GetClientRect
 	// SYSCORE_Window_Win32_PFN_PeekMessageW is the C type for PeekMessageW.
 	SYSCORE_Window_Win32_PFN_PeekMessageW = user32.PFN_PeekMessageW
 	// SYSCORE_Window_Win32_PFN_DispatchMessageW is the C type for DispatchMessageW.
@@ -257,6 +259,13 @@ SYSCORE_Window_Win32_CommandManifestAddDestroyWindow registers DestroyWindow for
 */
 func SYSCORE_Window_Win32_CommandManifestAddDestroyWindow(manifest *SYSCORE_Window_Win32_CommandManifest, target *SYSCORE_Window_Win32_PFN_DestroyWindow) error {
 	return loader.Win32CommandManifestAddDestroyWindow(manifest, target)
+}
+
+/*
+SYSCORE_Window_Win32_CommandManifestAddGetClientRect registers GetClientRect for selective loading.
+*/
+func SYSCORE_Window_Win32_CommandManifestAddGetClientRect(manifest *SYSCORE_Window_Win32_CommandManifest, target *SYSCORE_Window_Win32_PFN_GetClientRect) error {
+	return loader.Win32CommandManifestAddGetClientRect(manifest, target)
 }
 
 /*

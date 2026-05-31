@@ -49,6 +49,14 @@ type XcbCommands struct {
 	*/
 	InternAtomReply bindings.PFN_xcb_intern_atom_reply
 	/*
+		GetGeometry is xcb_get_geometry. Queries window geometry (returns cookie).
+	*/
+	GetGeometry bindings.PFN_xcb_get_geometry
+	/*
+		GetGeometryReply is xcb_get_geometry_reply. Blocks for a get_geometry reply.
+	*/
+	GetGeometryReply bindings.PFN_xcb_get_geometry_reply
+	/*
 		ChangeProperty is xcb_change_property. Sets window properties such as WM_NAME.
 	*/
 	ChangeProperty bindings.PFN_xcb_change_property

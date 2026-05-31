@@ -117,6 +117,8 @@ func xcbLoaderCommands() []loaderCommandSpec {
 		{"Flush", "xcb_flush"},
 		{"InternAtom", "xcb_intern_atom"},
 		{"InternAtomReply", "xcb_intern_atom_reply"},
+		{"GetGeometry", "xcb_get_geometry"},
+		{"GetGeometryReply", "xcb_get_geometry_reply"},
 		{"ChangeProperty", "xcb_change_property"},
 		{"Free", "free"},
 		{"DestroyWindow", "xcb_destroy_window"},
@@ -145,6 +147,7 @@ func win32LoaderCommandsGenerate(spec loaderGenSpec) error {
 		{"UpdateWindow", "UpdateWindow"},
 		{"LoadCursorW", "LoadCursorW"},
 		{"DestroyWindow", "DestroyWindow"},
+		{"GetClientRect", "GetClientRect"},
 		{"PeekMessageW", "PeekMessageW"},
 		{"DispatchMessageW", "DispatchMessageW"},
 	})

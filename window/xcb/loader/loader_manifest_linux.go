@@ -37,6 +37,10 @@ func XcbCommandsLoadManifest(module XcbModule, manifest *XcbCommandManifest, com
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.InternAtom, Name: "xcb_intern_atom"})
 		case XcbCommandManifestFieldInternAtomReply:
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.InternAtomReply, Name: "xcb_intern_atom_reply"})
+		case XcbCommandManifestFieldGetGeometry:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.GetGeometry, Name: "xcb_get_geometry"})
+		case XcbCommandManifestFieldGetGeometryReply:
+			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.GetGeometryReply, Name: "xcb_get_geometry_reply"})
 		case XcbCommandManifestFieldChangeProperty:
 			mappings = append(mappings, loadutil.CommandMapping{Target: &commands.ChangeProperty, Name: "xcb_change_property"})
 		case XcbCommandManifestFieldFree:

@@ -21,6 +21,8 @@ const (
 	XcbCommandManifestFieldFlush
 	XcbCommandManifestFieldInternAtom
 	XcbCommandManifestFieldInternAtomReply
+	XcbCommandManifestFieldGetGeometry
+	XcbCommandManifestFieldGetGeometryReply
 	XcbCommandManifestFieldChangeProperty
 	XcbCommandManifestFieldFree
 	XcbCommandManifestFieldDestroyWindow
@@ -72,6 +74,14 @@ func XcbCommandManifestAddInternAtom(manifest *XcbCommandManifest, target *bindi
 
 func XcbCommandManifestAddInternAtomReply(manifest *XcbCommandManifest, target *bindings.PFN_xcb_intern_atom_reply) error {
 	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldInternAtomReply, target)
+}
+
+func XcbCommandManifestAddGetGeometry(manifest *XcbCommandManifest, target *bindings.PFN_xcb_get_geometry) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldGetGeometry, target)
+}
+
+func XcbCommandManifestAddGetGeometryReply(manifest *XcbCommandManifest, target *bindings.PFN_xcb_get_geometry_reply) error {
+	return xcbCommandManifestAdd(manifest, XcbCommandManifestFieldGetGeometryReply, target)
 }
 
 func XcbCommandManifestAddChangeProperty(manifest *XcbCommandManifest, target *bindings.PFN_xcb_change_property) error {

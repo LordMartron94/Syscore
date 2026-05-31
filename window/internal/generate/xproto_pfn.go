@@ -48,6 +48,21 @@ func xcbPFNSpecFromSymbol(ir *xprotoIR, symbol string) (bindingPFNSpec, error) {
 		}, nil
 	}
 
+	if symbol == "xcb_get_geometry_reply" {
+		return bindingPFNSpec{
+			Name: "PFN_xcb_get_geometry_reply",
+			Func: gocode.TypeExprFunc(
+				[]gocode.ParamType{
+					{Name: "c", Type: gocode.TypeExprNamed("XcbConnectionT")},
+					{Name: "cookie", Type: gocode.TypeExprNamed("XcbGetGeometryCookieT")},
+					{Name: "e", Type: gocode.TypeExprNamed("uintptr")},
+				},
+				[]gocode.TypeExpr{gocode.TypeExprNamed("uintptr")},
+			),
+			Doc: "PFN_xcb_get_geometry_reply maps to xcb_get_geometry_reply.",
+		}, nil
+	}
+
 	if aux, ok := xcbAuxiliaryPFNSpec(symbol); ok {
 		return aux, nil
 	}
@@ -98,8 +113,13 @@ func xcbFieldParam(field xprotoFieldIR) []gocode.ParamType {
 }
 
 func xcbRequestReturnType(req xprotoRequestIR) string {
-	if req.HasReply && req.Name == "InternAtom" {
-		return "XcbInternAtomCookieT"
+	if req.HasReply {
+		switch req.Name {
+		case "InternAtom":
+			return "XcbInternAtomCookieT"
+		case "GetGeometry":
+			return "XcbGetGeometryCookieT"
+		}
 	}
 	return "XcbVoidCookieT"
 }

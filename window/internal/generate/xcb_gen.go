@@ -172,6 +172,8 @@ func xcbConstantsGenerate(outputDir string, ir *xprotoIR, ewmhAtomNames map[stri
 		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PMIN_SIZE", gocode.TypeExprNamedPtr("int32"), sizeHintPMinSizeValueExpr, "XCB_SIZE_HINTS_FLAG_PMIN_SIZE sets min_width and min_height."),
 		gocode.ConstSpecNew("XCB_SIZE_HINTS_FLAG_PMAX_SIZE", gocode.TypeExprNamedPtr("int32"), sizeHintPMaxSizeValueExpr, "XCB_SIZE_HINTS_FLAG_PMAX_SIZE sets max_width and max_height."),
 		gocode.ConstSpecNew("XcbInternAtomReplyAtomOffset", nil, "unsafe.Offsetof(struct{ ResponseType uint8; Pad0 uint8; Sequence uint16; Length uint32; Atom XcbAtomT }{}.Atom)", "XcbInternAtomReplyAtomOffset is the byte offset of atom in xcb_intern_atom_reply_t."),
+		gocode.ConstSpecNew("XcbGetGeometryReplyWidthOffset", nil, "unsafe.Offsetof(struct{ ResponseType uint8; Depth uint8; Sequence uint16; Length uint32; Root XcbWindowT; X int16; Y int16; Width uint16; Height uint16 }{}.Width)", "XcbGetGeometryReplyWidthOffset is the byte offset of width in xcb_get_geometry_reply_t."),
+		gocode.ConstSpecNew("XcbGetGeometryReplyHeightOffset", nil, "unsafe.Offsetof(struct{ ResponseType uint8; Depth uint8; Sequence uint16; Length uint32; Root XcbWindowT; X int16; Y int16; Width uint16; Height uint16 }{}.Height)", "XcbGetGeometryReplyHeightOffset is the byte offset of height in xcb_get_geometry_reply_t."),
 		gocode.ConstSpecNew("XcbSizeHintsPropertyWordCount", gocode.TypeExprNamedPtr("uint32"), "uint32(unsafe.Sizeof(XcbSizeHints{}) / unsafe.Sizeof(int32(0)))", "XcbSizeHintsPropertyWordCount is the xcb_change_property data length for XcbSizeHints."),
 	}
 	specs = append(specs, numericConsts...)
@@ -323,6 +325,7 @@ func xcbTypesGenerate(outputDir string, ir *xprotoIR) error {
 		{"XcbVoidCookieT", "uint32"},
 		{"XcbAtomT", "uint32"},
 		{"XcbInternAtomCookieT", "uint32"},
+		{"XcbGetGeometryCookieT", "uint32"},
 	}
 	for _, item := range opaqueTypes {
 		elements = append(elements, gocode.FileElementFrom(

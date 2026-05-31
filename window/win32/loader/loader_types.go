@@ -48,6 +48,10 @@ type Win32Commands struct {
 	*/
 	DestroyWindow user32.PFN_DestroyWindow
 	/*
+		GetClientRect is GetClientRect (user32). Returns the client-area size of an HWND.
+	*/
+	GetClientRect user32.PFN_GetClientRect
+	/*
 		PeekMessageW is PeekMessageW (user32). Non-blocking message queue peek.
 	*/
 	PeekMessageW user32.PFN_PeekMessageW
