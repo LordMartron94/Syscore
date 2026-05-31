@@ -67,6 +67,7 @@ const (
 	// SYSCORE_Window_Win32_CursorArrow to obtain that pointer.
 	SYSCORE_Window_Win32_CursorArrowResource uintptr = 32512
 	SYSCORE_Window_Win32_ShowWindow                  = wm.SW_SHOW
+	SYSCORE_Window_Win32_ShowWindowHide              = wm.SW_HIDE
 	SYSCORE_Window_Win32_MessageClose                = wm.WM_CLOSE
 	SYSCORE_Window_Win32_MessageDestroy              = wm.WM_DESTROY
 	SYSCORE_Window_Win32_PeekMessageRemove           = wm.PM_REMOVE
