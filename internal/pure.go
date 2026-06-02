@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"reflect"
 	"unsafe"
-
-	"github.com/ebitengine/purego"
 )
 
 type DynamicLibrary uintptr
@@ -25,8 +23,7 @@ func LibraryFunctionBind(library DynamicLibrary, targetFn any, functionName stri
 			err = fmt.Errorf("failed to bind function '%s': %v", functionName, r)
 		}
 	}()
-
-	purego.RegisterLibFunc(targetFn, uintptr(library), functionName)
+	syscoreLibraryFunctionBindExecute(library, targetFn, functionName)
 	return nil
 }
 
@@ -40,8 +37,7 @@ func FunctionBindAddress(targetFn any, address uintptr) (err error) {
 			err = fmt.Errorf("failed to bind function '%v': %v", targetFn, r)
 		}
 	}()
-
-	purego.RegisterFunc(targetFn, address)
+	syscoreFunctionBindAddressExecute(targetFn, address)
 	return nil
 }
 
@@ -50,6 +46,9 @@ func PlatformNewCallback(fn any) uintptr {
 }
 
 func FunctionPointerAddressSet(targetFnPointer any, address uintptr) error {
+	SyscoreFunctionBindingTargetValidate(targetFnPointer, "FunctionPointerAddressSet")
+	SyscoreFunctionBindingAddressValidate(address, "FunctionPointerAddressSet")
+
 	if targetFnPointer == nil {
 		return fmt.Errorf("failed to set function pointer address: nil target")
 	}
@@ -69,7 +68,6 @@ func FunctionPointerAddressSet(targetFnPointer any, address uintptr) error {
 	if targetAddress == 0 {
 		return fmt.Errorf("failed to set function pointer address: invalid target pointer")
 	}
-
 	*(*uintptr)(unsafe.Pointer(targetAddress)) = address
 	return nil
 }

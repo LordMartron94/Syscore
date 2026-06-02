@@ -4,6 +4,7 @@ import (
 	"memarch"
 	"memcore"
 	"syscore/internal"
+	"unsafe"
 )
 
 /*
@@ -51,7 +52,9 @@ The manual memory mark and a pointer to the first byte of the C string.
 Allocates memory through allocFn.
 */
 func SYSCORE_C_StringToCStringManual(allocFn memarch.AllocationFn, str string) (memcore.MarkRaw, *byte) {
-	return memarch.MemArchCStringCreate(allocFn, str)
+	mark, firstByte := memarch.MemArchCStringCreate(allocFn, str)
+	internal.SyscorePointerValidateMemcoreManaged(unsafe.Pointer(firstByte), "SYSCORE_C_StringToCStringManual")
+	return mark, firstByte
 }
 
 /*
@@ -73,6 +76,7 @@ Allocates memory through allocFn.
 */
 func SYSCORE_C_StringToCStringFirstByteManual(allocFn memarch.AllocationFn, str string) *byte {
 	_, firstByte := memarch.MemArchCStringCreate(allocFn, str)
+	internal.SyscorePointerValidateMemcoreManaged(unsafe.Pointer(firstByte), "SYSCORE_C_StringToCStringFirstByteManual")
 	return firstByte
 }
 
