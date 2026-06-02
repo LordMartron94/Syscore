@@ -37,6 +37,9 @@ type SYSCORE_Window_Xcb_CommandManifest = loader.XcbCommandManifest
 const (
 	SYSCORE_Window_Xcb_WindowClassInputOutput         = bindings.XCB_WINDOW_CLASS_INPUT_OUTPUT
 	SYSCORE_Window_Xcb_PropModeReplace                = bindings.XCB_PROP_MODE_REPLACE
+	SYSCORE_Window_Xcb_CWEventMask                    = bindings.XCB_CW_EVENT_MASK
+	SYSCORE_Window_Xcb_EventMaskStructureNotify       = bindings.XCB_EVENT_MASK_STRUCTURE_NOTIFY
+	SYSCORE_Window_Xcb_EventConfigureNotify           = bindings.XCB_EVENT_CONFIGURE_NOTIFY
 	SYSCORE_Window_Xcb_AtomNameWMName                 = bindings.XCB_ATOM_WM_NAME
 	SYSCORE_Window_Xcb_AtomNameNetWMName              = bindings.XCB_ATOM_NET_WM_NAME
 	SYSCORE_Window_Xcb_AtomNameUTF8String             = bindings.XCB_ATOM_UTF8_STRING
@@ -112,6 +115,8 @@ type (
 	SYSCORE_Window_Xcb_ClientMessageEvent = bindings.XcbClientMessageEvent
 	// SYSCORE_Window_Xcb_DestroyNotifyEvent is the xcb_destroy_notify_event_t wire layout.
 	SYSCORE_Window_Xcb_DestroyNotifyEvent = bindings.XcbDestroyNotifyEvent
+	// SYSCORE_Window_Xcb_ConfigureNotifyEvent is the xcb_configure_notify_event_t wire layout.
+	SYSCORE_Window_Xcb_ConfigureNotifyEvent = bindings.XcbConfigureNotifyEvent
 )
 
 /*

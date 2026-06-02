@@ -88,14 +88,23 @@ func xprotoIRBuild(xmlPath string) (*xprotoIR, error) {
 					continue
 				}
 				valueNode := item.Child("value")
-				if valueNode == nil || strings.TrimSpace(valueNode.Text) == "" {
+				if valueNode != nil && strings.TrimSpace(valueNode.Text) != "" {
+					value, err := strconv.ParseInt(strings.TrimSpace(valueNode.Text), 10, 64)
+					if err != nil {
+						continue
+					}
+					items[itemName] = value
 					continue
 				}
-				value, err := strconv.ParseInt(strings.TrimSpace(valueNode.Text), 10, 64)
-				if err != nil {
+				bitNode := item.Child("bit")
+				if bitNode == nil || strings.TrimSpace(bitNode.Text) == "" {
 					continue
 				}
-				items[itemName] = value
+				bitIndex, err := strconv.ParseInt(strings.TrimSpace(bitNode.Text), 10, 64)
+				if err != nil || bitIndex < 0 {
+					continue
+				}
+				items[itemName] = int64(1) << bitIndex
 			}
 			if len(items) > 0 {
 				ir.Enums[enumName] = items

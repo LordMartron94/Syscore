@@ -137,6 +137,18 @@ func xcbConstantsGenerate(outputDir string, ir *xprotoIR, ewmhAtomNames map[stri
 	if err != nil {
 		return err
 	}
+	eventConfigureNotify, err := xcbEventNumberRequire(ir, "ConfigureNotify")
+	if err != nil {
+		return err
+	}
+	cwEventMask, err := xcbEnumValueRequireInt(ir, "CW", "EventMask")
+	if err != nil {
+		return err
+	}
+	eventMaskStructureNotify, err := xcbEnumValueRequireInt(ir, "EventMask", "StructureNotify")
+	if err != nil {
+		return err
+	}
 
 	numericConsts := []gocode.ConstSpec{
 		gocode.ConstSpecNew(
@@ -162,6 +174,24 @@ func xcbConstantsGenerate(outputDir string, ir *xprotoIR, ewmhAtomNames map[stri
 			gocode.TypeExprNamedPtr("uint8"),
 			fmt.Sprintf("%d", eventDestroyNotify),
 			"XCB_EVENT_DESTROY_NOTIFY is the response type for DestroyNotify events.",
+		),
+		gocode.ConstSpecNew(
+			"XCB_EVENT_CONFIGURE_NOTIFY",
+			gocode.TypeExprNamedPtr("uint8"),
+			fmt.Sprintf("%d", eventConfigureNotify),
+			"XCB_EVENT_CONFIGURE_NOTIFY is the response type for ConfigureNotify events.",
+		),
+		gocode.ConstSpecNew(
+			"XCB_CW_EVENT_MASK",
+			gocode.TypeExprNamedPtr("uint32"),
+			fmt.Sprintf("%d", cwEventMask),
+			"XCB_CW_EVENT_MASK is the CreateWindow/ChangeWindowAttributes value mask bit for event_mask.",
+		),
+		gocode.ConstSpecNew(
+			"XCB_EVENT_MASK_STRUCTURE_NOTIFY",
+			gocode.TypeExprNamedPtr("uint32"),
+			fmt.Sprintf("%d", eventMaskStructureNotify),
+			"XCB_EVENT_MASK_STRUCTURE_NOTIFY selects ConfigureNotify on the window.",
 		),
 		gocode.ConstSpecNew("XCB_RESPONSE_TYPE_EVENT_CODE_MASK", gocode.TypeExprNamedPtr("uint8"), eventResponseTypeMaskValueExpr, "XCB_RESPONSE_TYPE_EVENT_CODE_MASK masks the core event code from response_type (X11 core protocol send_event flag is bit 7)."),
 		gocode.ConstSpecNew("XCB_RESPONSE_TYPE_SENT_EVENT_FLAG", gocode.TypeExprNamedPtr("uint8"), "^XCB_RESPONSE_TYPE_EVENT_CODE_MASK", "XCB_RESPONSE_TYPE_SENT_EVENT_FLAG is set in response_type when the X server marks send_event=true (bit 7)."),
@@ -366,6 +396,25 @@ func xcbTypesGenerate(outputDir string, ir *xprotoIR) error {
 	))
 	bindingBlankLine(&elements)
 
+	elements = append(elements, gocode.FileElementFrom(
+		gocode.DeclTypeStruct("XcbConfigureNotifyEvent", []gocode.StructFieldDecl{
+			gocode.StructFieldTypeDoc("ResponseType", gocode.TypeExprNamed("uint8"), ""),
+			gocode.StructFieldTypeDoc("Pad0", gocode.TypeExprNamed("uint8"), ""),
+			gocode.StructFieldTypeDoc("Sequence", gocode.TypeExprNamed("uint16"), ""),
+			gocode.StructFieldTypeDoc("Event", gocode.TypeExprNamed("XcbWindowT"), ""),
+			gocode.StructFieldTypeDoc("Window", gocode.TypeExprNamed("XcbWindowT"), ""),
+			gocode.StructFieldTypeDoc("AboveSibling", gocode.TypeExprNamed("XcbWindowT"), ""),
+			gocode.StructFieldTypeDoc("X", gocode.TypeExprNamed("int16"), ""),
+			gocode.StructFieldTypeDoc("Y", gocode.TypeExprNamed("int16"), ""),
+			gocode.StructFieldTypeDoc("Width", gocode.TypeExprNamed("uint16"), ""),
+			gocode.StructFieldTypeDoc("Height", gocode.TypeExprNamed("uint16"), ""),
+			gocode.StructFieldTypeDoc("BorderWidth", gocode.TypeExprNamed("uint16"), ""),
+			gocode.StructFieldTypeDoc("OverrideRedirect", gocode.TypeExprNamed("uint8"), ""),
+			gocode.StructFieldTypeDoc("Pad1", gocode.TypeExprNamed("uint8"), ""),
+		}, "XcbConfigureNotifyEvent is the xcb_configure_notify_event_t wire layout (32 bytes)."),
+	))
+	bindingBlankLine(&elements)
+
 	sizeHintFields := []string{
 		"Flags", "X", "Y", "Width", "Height", "MinWidth", "MinHeight", "MaxWidth", "MaxHeight",
 		"WidthInc", "HeightInc", "MinAspectNum", "MinAspectDen", "MaxAspectNum", "MaxAspectDen",
@@ -400,6 +449,7 @@ func xcbSizeofGuardElements() []codegen.FileElement {
 	}{
 		{"XcbClientMessageEvent", 32},
 		{"XcbDestroyNotifyEvent", 12},
+		{"XcbConfigureNotifyEvent", 32},
 	}
 	elements := make([]codegen.FileElement, 0, len(guards)+1)
 	for _, guard := range guards {
